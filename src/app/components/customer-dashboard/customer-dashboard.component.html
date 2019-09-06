@@ -1,0 +1,25 @@
+<div class="dashboard">
+  <h1>Customer Dashboard</h1>
+  <div></div>
+  <app-coupons
+    title="Available Coupons"
+    [coupons]="coupons"
+    class="customer-coup"
+    usertype="customer"
+    [sections]="coupSections"
+    (openOne)="openOne($event, 'coupon')"
+  ></app-coupons>
+
+  <div class="purchased-coups">
+    <app-coupons
+      title="Purchased Coupons"
+      [coupons]="purchasedCoupons"
+      class="customer-coup"
+      usertype="customer"
+      [sections]="coupSections"
+      (openOne)="openOne($event, 'coupon')"
+      purchased="true"
+    >
+    </app-coupons>
+  </div>
+</div>

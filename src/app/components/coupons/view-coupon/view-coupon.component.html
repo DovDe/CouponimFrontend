@@ -1,0 +1,64 @@
+<div class="view-coupon">
+  <div class="main">
+    <div class="left">
+      <div class="title">
+        <h1>{{ coupon.title }}</h1>
+      </div>
+      <div class="img">
+        <img src="{{ coupon.image }}" alt="" />
+      </div>
+    </div>
+    <div class="right">
+      <div class="right_class">
+        <div class="item-head">
+          <span>Category</span>
+        </div>
+        <div class="item-body">
+          <p>{{ coupon.categoryName }}</p>
+        </div>
+      </div>
+      <div class="right_class">
+        <div class="item-head ">
+          <span>Description</span>
+        </div>
+        <div class="item-body desc-body">
+          <p>{{ coupon.description }}</p>
+        </div>
+      </div>
+
+      <div class="right_class" *ngFor="let item of rightSection">
+        <div class="item-head">
+          <span> {{ item.htmlText }}</span>
+        </div>
+        <div class="item-body">
+          <p>{{ coupon[item.dbName] }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="buttons" *ngIf="usertype != 'customer'">
+    <div class="button" (click)="updateCoupon()">
+      <div class="fa-holder">
+        <span> click to update </span>
+        <fa name="edit"></fa>
+      </div>
+    </div>
+    <div class="button" (click)="deleteCoupon()">
+      <div class="fa-holder">
+        <span> click to delete </span>
+
+        <fa name="trash"></fa>
+      </div>
+    </div>
+  </div> -->
+
+  <div
+    class="purchase"
+    *ngIf="usertype == 'customer' && !purchased"
+    (click)="purchaseCoupon()"
+  >
+    <div class="fa-holder">
+      <span>click to purchase</span>
+    </div>
+  </div>
+</div>

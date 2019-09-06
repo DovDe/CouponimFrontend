@@ -1,0 +1,25 @@
+<div class="dash-head-filters">
+  <select [(ngModel)]="filterType" (change)="filterTypeChange($event)">
+    <option value="all">View All Coupons</option>
+    <option value="maxprice">Filter coupons by price</option>
+    <option value="category">Filter coupons by category</option>
+  </select>
+  <input
+    *ngIf="filterType === 'maxprice'"
+    type="text"
+    placeholder="filter value"
+    (keyup)="filterContent($event)"
+    [(ngModel)]="filterValue"
+    #filter
+  />
+  <select
+    *ngIf="filterType === 'category'"
+    [(ngModel)]="categoryType"
+    (change)="filterContent($event)"
+  >
+    <option value="all">All Categories</option>
+    <option value="vacation">Vacation</option>
+    <option value="food">Food</option>
+    <option value="electronic">Electronics</option>
+  </select>
+</div>

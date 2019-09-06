@@ -1,0 +1,63 @@
+<div>
+  <div class="couplist">
+    <div class="dash-head">
+      <h2>{{ title }}</h2>
+      <app-filters
+        usertype="{{ usertype }}"
+        (filter)="onFilter($event)"
+      ></app-filters>
+      <div
+        class="fa-holder"
+        *ngIf="usertype != 'customer'"
+        (click)="openAddCoupon()"
+      >
+        <span>Add Coupon</span><fa name="fas fa-plus-circle fa-lg"></fa>
+      </div>
+    </div>
+    <div class="coup_headings">
+      <div class="coup_row">
+        <div class="coup_row_data ">
+          <span class="{{ item.dbName }}" *ngFor="let item of sections">{{
+            item.htmlText
+          }}</span>
+          <div class="coup_row_buttons"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coup_info">
+      <div class="coup_row" *ngFor="let coup of coupons">
+        <div class="coup_row_data">
+          <span class="{{ item.dbName }}" *ngFor="let item of sections">
+            {{ coup[item.dbName] }}</span
+          >
+          <div class="coup_row_buttons">
+            <input
+              type="button"
+              value="view"
+              (click)="clickedRowButton(coup, $event)"
+            />
+            <input
+              type="button"
+              value="edit"
+              *ngIf="usertype != 'customer'"
+              (click)="clickedRowButton(coup, $event)"
+            />
+            <input
+              *ngIf="usertype != 'customer'"
+              type="button"
+              value="delete"
+              (click)="onDelete(coup)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-modal
+    *ngIf="viewOne"
+    [viewType]="viewType"
+    parentType="coupon"
+    (close)="onClose()"
+  ></app-modal>
+</div>

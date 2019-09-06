@@ -1,0 +1,52 @@
+<div class="add-coupon">
+  <form (ngSubmit)="addCoupon()" #f="ngForm">
+    <div class="form-section">
+      <div class="form-section">
+        <label for="category">Category</label>
+        <select name="categoryName" ngModel id="category">
+          <option disabled></option>
+          <option value="food">Food</option>
+          <option value="vacation">Vacation</option>
+          <option value="electronics">Electronics</option>
+        </select>
+      </div>
+      <label for="title">Title</label>
+      <input class="input" type="text" id="title" name="title" ngModel />
+    </div>
+    <div class="form-section date-input">
+      <label for="startDate">Start Date</label>
+      <input
+        class="date"
+        type="date"
+        name="startDate"
+        name="startDate"
+        id="startDate"
+        ngModel
+      />
+    </div>
+    <div class="form-section date-input">
+      <label for="endDate">End Date</label>
+      <input class="date" type="date" name="endDate" name="endDate" ngModel />
+    </div>
+    <div class="form-section">
+      <label for="description">Description</label>
+      <textarea name="description" ngModel></textarea>
+    </div>
+
+    <div class="form-section">
+      <label for="amount">Inventory</label>
+      <input type="number" name="amount" ngModel />
+    </div>
+    <div class="form-section">
+      <label for="price">Price</label>
+      <input type="number" name="price" ngModel />
+    </div>
+    <div class="form-section">
+      <label for="image">Image URL</label>
+      <input type="text" name="image" ngModel id="image" />
+    </div>
+    <div class="form-section">
+      <input class="submit" type="submit" value="Submit" />
+    </div>
+  </form>
+</div>

@@ -1,0 +1,120 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins/mixins";
+@import "../../../scss/variables";
+@import "../../../scss/mixins/mixins";
+
+.dash {
+  @include flex-container(row);
+  justify-content: flex-start;
+  align-content: stretch;
+  background: inherit;
+  color: $black;
+  flex-wrap: wrap;
+
+  .fa-holder {
+    font-size: 2.5rem;
+    color: $primary;
+    margin-left: 1rem;
+    // height: 100%;
+
+    align-self: stretch;
+    transition: all 0.3s ease;
+    @include flex-container(row);
+    align-items: center;
+    cursor: pointer;
+    span {
+      font-size: 1.6rem;
+      padding: 0 1rem;
+    }
+  }
+  .fa-holder:hover {
+    color: $black;
+    transform: translateY(-3px) scale(1.1);
+    text-shadow: $boxShadow;
+  }
+  .dash-head {
+    width: 100%;
+    margin-bottom: 2rem;
+
+    @include flex-container(row);
+    app-filters {
+      @include flex-col;
+      flex: 3;
+    }
+
+    h2 {
+      @include flex-col;
+    }
+  }
+  .dash_headings {
+    @include flex-container(row);
+    width: 100%;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: $primary;
+    background: darken($white, 5);
+  }
+  .dash_info {
+    width: 100%;
+    input {
+      // flex: 3;
+      // flex-grow: 0;
+      width: 30%;
+    }
+    .dash_row:nth-of-type(2n) {
+      background: darken($white, 5);
+    }
+    .dash_row_data:hover input:hover {
+      background: $white;
+      color: $primary;
+    }
+    .dash_row_data:hover {
+      background: $primary;
+      box-shadow: $boxShadow;
+      cursor: pointer;
+    }
+  }
+  .dash_row {
+    @include flex-col;
+    @include flex-container(row);
+    flex: 3;
+  }
+
+  .dash_row_data {
+    @include flex-col;
+    flex: 3;
+    @include flex-container(row);
+    transition: $transition;
+    span {
+      display: block;
+      @include flex-col;
+    }
+  }
+
+  .dash_row_buttons {
+    @include flex-col;
+    flex: 1;
+    @include flex-container(row);
+
+    input {
+      @include input;
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      background: $primary;
+      color: white;
+      margin: 0.5rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease-out;
+    }
+    input:hover {
+      background: lighten($primary, 10);
+      box-shadow: $boxShadow;
+      transform: translateY(-2px) scale(1.05);
+    }
+  }
+  .instruction {
+    font-size: 1rem;
+  }
+}

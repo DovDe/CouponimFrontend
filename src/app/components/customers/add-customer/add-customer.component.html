@@ -1,0 +1,66 @@
+<div class="add-customer">
+  <form (ngSubmit)="addCustomer()" #f="ngForm">
+    <div class="form-section">
+      <label for="firstName">First Name</label>
+      <input
+        type="text"
+        name="firstName"
+        #fname="ngModel"
+        [(ngModel)]="firstname"
+        required
+      />
+      <span *ngIf="!firstname && fname.touched" class="help-text"
+        >Please enter a first name</span
+      >
+    </div>
+    <div class="form-section">
+      <label for="lastName">Last Name</label
+      ><input
+        name="lastName"
+        type="text"
+        [(ngModel)]="lastname"
+        #lname="ngModel"
+        required
+      />
+      <span *ngIf="!lastname && lname.touched" class="help-text"
+        >Please enter a last name</span
+      >
+    </div>
+    <div class="form-section">
+      <label for="email">Email</label
+      ><input
+        name="email"
+        email
+        required
+        type="email"
+        ngModel
+        #email="ngModel"
+      />
+      <span *ngIf="!email.valid && email.touched" class="help-text"
+        >Please enter a valid email</span
+      >
+    </div>
+    <div class="form-section">
+      <label for="password">Password</label
+      ><input
+        name="password"
+        type="password"
+        #pword="ngModel"
+        ngModel
+        min="4"
+        required
+      />
+      <span *ngIf="!pword.valid && pword.touched" class="help-text"
+        >Please enter password longer than 4 characters</span
+      >
+    </div>
+    <div class="form-section">
+      <input
+        class="submit"
+        type="submit"
+        value="Submit"
+        [disabled]="!f.valid"
+      />
+    </div>
+  </form>
+</div>

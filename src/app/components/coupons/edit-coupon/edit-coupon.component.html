@@ -1,0 +1,68 @@
+<div class="edit">
+  <form #f="ngForm" (ngSubmit)="updateCoupon()">
+    <div class="form-section">
+      <!-- <label for="title">Title</label
+      ><input type="text" name="title" [(ngModel)]="coupon.title" /> -->
+      <h2>{{ coupon.title }}</h2>
+    </div>
+
+    <div class="form-section">
+      <label for="category">Category</label>
+      <select
+        name="categoryName"
+        [(ngModel)]="coupon.categoryName"
+        id="category"
+      >
+        <option disabled></option>
+        <option value="food">Food</option>
+        <option value="vacation">Vacation</option>
+        <option value="electronics">Electronics</option>
+      </select>
+    </div>
+    <div class="form-section">
+      <div class="form-section date-input">
+        <label for="startDate">Start Date</label>
+        <input
+          class="date"
+          type="date"
+          name="startDate"
+          id="startDate"
+          [(ngModel)]="coupon.startDate"
+        />
+      </div>
+      <div class="form-section date-input">
+        <label for="endDate">End Date</label>
+        <input
+          class="date"
+          type="date"
+          name="endDate"
+          [(ngModel)]="coupon.endDate"
+        />
+      </div>
+      <div class="form-section">
+        <label for="description">Description</label>
+        <textarea
+          name="description"
+          [(ngModel)]="coupon.description"
+        ></textarea>
+      </div>
+
+      <div class="form-section">
+        <label for="amount">Inventory</label>
+        <input type="number" name="amount" [(ngModel)]="coupon.amount" />
+      </div>
+      <div class="form-section">
+        <label for="price">Price</label>
+        <input type="number" name="price" [(ngModel)]="coupon.price" />
+      </div>
+      <div class="form-section">
+        <div class="image">
+          <img src="{{ coupon.image }}" alt="" />
+        </div>
+        <label for="image">Image URL</label>
+        <input type="text" name="image" [(ngModel)]="coupon.image" id="image" />
+      </div>
+      <input class="submit" type="submit" value="Submit" />
+    </div>
+  </form>
+</div>

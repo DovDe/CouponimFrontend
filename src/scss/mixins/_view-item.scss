@@ -1,0 +1,89 @@
+@mixin viewItem-buttons {
+  .buttons {
+    width: 100%;
+    height: 5rem;
+    @include flex-container(column);
+    align-content: space-between;
+    justify-content: space-between;
+
+    .button {
+      width: 48%;
+      @include flex-container(column);
+      cursor: pointer;
+      text-align: center;
+      font-size: 2rem;
+      height: 4rem;
+      color: $white;
+      background-color: $primary;
+      transition: $transition;
+    }
+    .button:hover {
+      padding-right: 30%;
+      background-color: $black;
+      box-shadow: $boxShadow;
+
+      .fa-holder span {
+        display: none;
+      }
+    }
+  }
+  .fa-holder span {
+    margin-right: 2rem;
+  }
+}
+
+@mixin viewItem-main {
+  .main {
+    padding: 2rem;
+    width: 100%;
+    min-height: 50vh;
+    @include flex-container(row);
+    justify-content: stretch;
+    align-items: stretch;
+    align-content: stretch;
+    margin-bottom: 4rem;
+    background-color: lighten($white, 1);
+    box-shadow: $boxShadow;
+  }
+}
+@mixin viewItem-head {
+  .item-head {
+    @include flex-container(row);
+    justify-content: space-between;
+    font-size: 2rem;
+    font-weight: 700;
+    border-bottom: $borderBottom;
+    .toggle {
+      font-size: 1rem;
+      font-weight: 400;
+    }
+  }
+  .item-head:hover .fa-holder::before {
+    content: "toggle to edit";
+    font-size: 1rem;
+    padding-right: 1rem;
+    color: $primary;
+    margin: auto;
+  }
+}
+@mixin viewItem-body {
+  .item-body {
+    height: 6rem;
+    input {
+      background: inherit;
+      outline: none;
+      border: none;
+      width: 100%;
+      border-bottom: $borderBottom;
+    }
+  }
+}
+
+@mixin viewItem-main-content {
+  margin-left: 2.5%;
+  flex: 3;
+  @include flex-container(column);
+  justify-content: stretch;
+  align-items: stretch;
+  align-content: stretch;
+}

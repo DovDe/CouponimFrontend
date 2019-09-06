@@ -1,0 +1,56 @@
+<div>
+  <div class="dash">
+    <div class="dash-head">
+      <h2>Companies</h2>
+      <!-- <app-filters (filter)="onFilter($event)"></app-filters> -->
+      <div class="fa-holder" (click)="openAdd()">
+        <span>Add Company</span><fa name="fas fa-plus-circle fa-lg"></fa>
+      </div>
+    </div>
+    <div class="dash_headings">
+      <div class="dash_row">
+        <div class="dash_row_data ">
+          <span *ngFor="let item of sections">{{ item.htmlText }}</span>
+          <div class="dash_row_buttons"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash_info">
+      <div class="dash_row" *ngFor="let comp of companies">
+        <div class="dash_row_data">
+          <span *ngFor="let item of sections"> {{ comp[item.dbName] }}</span>
+          <div class="dash_row_buttons">
+            <input
+              type="button"
+              value="view"
+              name="viewType"
+              (click)="clickedRowButton(comp, $event)"
+            />
+            <input
+              type="button"
+              value="edit"
+              name="viewType"
+              (click)="clickedRowButton(comp, $event)"
+            />
+            <input
+              type="button"
+              value="delete"
+              name="viewType"
+              (click)="onDelete(comp)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="instruction">
+      <span>click any row to access company</span>
+    </div>
+  </div>
+  <app-modal
+    *ngIf="viewOne"
+    [viewType]="viewType"
+    parentType="company"
+    (close)="onClose()"
+  ></app-modal>
+</div>

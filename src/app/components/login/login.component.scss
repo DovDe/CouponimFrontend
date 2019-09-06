@@ -1,0 +1,86 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins/mixins";
+
+.login {
+  padding: 5% 25% 10% 25%;
+  text-transform: uppercase;
+
+  h1 {
+    margin: 0 auto 3rem;
+    text-align: center;
+  }
+  form {
+    @include flex-container(column);
+    width: 100%;
+  }
+  .form-group {
+    width: 100%;
+    @include flex-container(row);
+    justify-content: space-between;
+    padding: 0;
+  }
+  input {
+    @include input;
+  }
+
+  input[type="button"] {
+    @include input-submit;
+    border: none;
+    width: 100%;
+  }
+  input[type="button"]:hover,
+  input[type="button"]:focus {
+    @include input-submit-hover;
+  }
+  .email,
+  .password {
+    margin-bottom: 2rem;
+    width: 48%;
+  }
+
+  .email:hover,
+  .password:hover {
+    @include input-focus;
+    border-bottom-color: inherit;
+  }
+
+  input:focus::placeholder {
+    @include input-placeholder;
+  }
+  .radio {
+    @include flex-container(row);
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .radio_group {
+    @include radio-group;
+    border-bottom: 2px solid $black;
+  }
+
+  .radio_group:first-of-type {
+    margin-left: 0;
+  }
+  .radio_group:last-of-type {
+    margin-right: 0;
+  }
+  .radio_group:hover {
+    background: rgba($primary, 0.7);
+    border-bottom: none;
+    box-shadow: $boxShadow;
+    transform: scale(1.005);
+  }
+}
+
+.message {
+  width: 100%;
+  color: $white;
+  text-align: center;
+  padding: 2rem;
+  height: 5rem;
+  margin-bottom: 3rem;
+  h2 {
+    background: $danger;
+  }
+}

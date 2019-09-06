@@ -1,0 +1,11 @@
+@mixin flex-container($flex-direction) {
+  display: flex;
+  flex-direction: $flex-direction;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+@mixin flex-col {
+  flex-grow: 1;
+  flex: 1;
+}

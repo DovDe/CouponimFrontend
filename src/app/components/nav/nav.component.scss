@@ -1,0 +1,35 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins/flex";
+nav {
+  min-width: 100%;
+  height: 5rem;
+  background: $black;
+  color: $white;
+  @include flex-container(row);
+  justify-content: space-between;
+
+  h1 {
+    margin-left: 3rem;
+  }
+
+  .nav {
+    @include flex-container(row);
+    height: 100%;
+    transition: all 0.4s ease-in-out;
+    div {
+      @include flex-container(column);
+      height: 100%;
+      min-width: 10rem;
+    }
+    div:last-of-type {
+      margin-right: 3rem;
+    }
+
+    .fa-holder:hover {
+      color: $primary;
+    }
+    .fa-holder {
+      cursor: pointer;
+    }
+  }
+}

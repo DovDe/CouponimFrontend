@@ -1,0 +1,15 @@
+<div class="add">
+  <form (ngSubmit)="addItem(f)" #f="ngForm">
+    <div class="form-section" *ngFor="let section of sections">
+      <label for="section.dbName">{{ section.htmlText }}</label>
+      <input
+        type="{{ section.inputType }}"
+        ngModel
+        name="{{ section.dbName }}"
+      />
+    </div>
+    <div class="form-section">
+      <input class="submit" type="submit" value="Submit" />
+    </div>
+  </form>
+</div>

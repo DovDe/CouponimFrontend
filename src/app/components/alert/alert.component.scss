@@ -1,0 +1,26 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins/mixins";
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vw;
+  background: rgba($black, 0.75);
+  z-index: 50;
+}
+.alert-box {
+  position: fixed;
+  top: 30vh;
+  left: 20vw;
+  width: 60vw;
+  padding: 1rem;
+  z-index: 100;
+  background: $white;
+  box-shadow: $boxShadow;
+}
+
+.alert-box-actions {
+  text-align: right;
+}

@@ -1,0 +1,84 @@
+<div class="login">
+  <h1>Couponim login</h1>
+  <!-- <app-alert
+    [message]="message"
+    *ngIf="error"
+    (close)="onHandleError()"
+  ></app-alert> -->
+
+  <form class="form">
+    <div class="radio">
+      <div class="radio_group">
+        <input
+          class="radio_input admin_input"
+          type="radio"
+          name="usertype"
+          id="admin"
+          value="administrator"
+          (change)="changeUserType($event)"
+        />
+        <label class="radio_label" for="admin"> admin</label>
+      </div>
+      <div class="radio_group">
+        <input
+          class="radio_input merchant_input"
+          type="radio"
+          name="usertype"
+          id="merchant"
+          value="company"
+          (change)="changeUserType($event)"
+        />
+        <label class="radio_label" for="merchant"> merchant</label>
+      </div>
+      <div class="radio_group">
+        <input
+          class="radio_input shopper_input"
+          type="radio"
+          name="usertype"
+          id="shoper"
+          value="customer"
+          (change)="changeUserType($event)"
+        />
+        <label class="radio_label " for="shoper">
+          Shopper
+        </label>
+      </div>
+      <!-- <div class="radio_group" *ngFor="let type of usertypes">
+        <label [for]="type" class="radio_label">
+          <input
+            [id]="type"
+            class="radio_input {{ type }}_input"
+            type="radio"
+            name="usertype"
+            [value]="type"
+            [(ngModel)]="usertype"
+          />
+          {{ type.toUpperCase() }}
+        </label>
+      </div> -->
+    </div>
+    <div class="form-group">
+      <input
+        type="email"
+        name="email"
+        class="email"
+        autocomplete="off"
+        placeholder="Email"
+        [(ngModel)]="email"
+      />
+      <input
+        type="password"
+        name="password"
+        class="password"
+        placeholder="Password"
+        [(ngModel)]="password"
+      />
+    </div>
+
+    <input type="button" value="submit" (click)="login()" />
+  </form>
+</div>
+
+<div class="message">
+  <h2 *ngIf="error">{{ message }}</h2>
+</div>

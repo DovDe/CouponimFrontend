@@ -1,0 +1,81 @@
+@mixin input {
+  font-family: inherit;
+  outline: none;
+  border: none;
+  padding: 2rem;
+  background: inherit;
+  // width: 100%;
+  border-bottom: 2px solid $primary;
+}
+
+@mixin input-focus {
+  background-color: $lightwhite;
+  border-bottom-color: $secondary;
+  box-shadow: $boxShadow;
+}
+
+@mixin input-submit {
+  text-transform: uppercase;
+  background-color: $black;
+  color: $white;
+  margin-top: 2rem;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: 700;
+  cursor: pointer;
+  border-color: $primary;
+}
+@mixin input-submit-hover {
+  background-color: $primary;
+  border-color: $secondary;
+  box-shadow: $boxShadow;
+  transform: scale(1.005);
+}
+@mixin input-placeholder {
+  color: rgba(0, 0, 0, 0);
+  text-transform: none;
+}
+
+@mixin radio-group {
+  margin: 0 1rem;
+  flex: 1;
+  height: 5rem;
+  line-height: 5rem;
+  background-color: $white;
+  color: $black;
+  @include flex-container(row);
+  font-weight: 700;
+
+  .radio_input {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+  }
+
+  .radio_label {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .radio_input:checked ~ .radio_label {
+    background: $primary;
+  }
+}
+@mixin select {
+  width: 100%;
+  text-transform: uppercase;
+  color: $black;
+  // margin-top: 2rem;
+  font-size: 2rem;
+  line-height: 4rem;
+  font-weight: 700;
+  background: $white;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid $primary;
+}
+
+@mixin option {
+  background: inherit;
+}

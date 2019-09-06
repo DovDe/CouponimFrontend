@@ -1,0 +1,7 @@
+@import "../../../../scss/variables";
+@import "../../../../scss/mixins/mixins";
+
+.allowed {
+  width: 100%;
+}
+@include add-item-form;

@@ -1,0 +1,50 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins/mixins";
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vw;
+  background: rgba($black, 0.75);
+  z-index: 50;
+}
+.modal-box {
+  position: fixed;
+  top: 10vh;
+  left: 10vw;
+  width: 80vw;
+  padding: 2rem;
+  z-index: 100;
+  background: $white;
+  box-shadow: $boxShadow;
+  height: 80vh;
+  overflow-y: scroll;
+  .header {
+    width: 100%;
+    @include flex-container(row);
+    justify-content: space-between;
+    min-height: 4rem;
+    border-bottom: 1px solid rgba($primary, 0.4);
+    color: $primary;
+
+    .fa-holder {
+      font-size: 3rem;
+      line-height: 4rem;
+      color: $primary;
+      border: none;
+      padding: 2rem;
+      transition: $transition;
+    }
+    .fa-holder:hover {
+      color: $black;
+      transform: translateY(-3px) scale(1.2);
+      text-shadow: $boxShadow;
+    }
+  }
+}
+
+.modal-box-actions {
+  text-align: right;
+}

@@ -1,0 +1,6 @@
+@mixin dashboard {
+  @include flex-container(row);
+  width: 100%;
+  padding: 5rem 3rem;
+  margin: 0;
+}

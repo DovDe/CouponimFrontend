@@ -1,0 +1,26 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins/mixins";
+
+h1 {
+  width: 100%;
+}
+.dashboard {
+  @include dashboard;
+}
+.customer-coup {
+  width: 100%;
+}
+.purchased-coups {
+  margin-top: 4rem;
+  width: 100%;
+  @include flex-container(row);
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  h2 {
+    width: 100%;
+  }
+  app-purchase-coupon {
+    width: 30%;
+  }
+}

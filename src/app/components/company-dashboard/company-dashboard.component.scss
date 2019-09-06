@@ -1,0 +1,12 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins/mixins";
+
+h1 {
+  width: 100%;
+}
+.company-dashboard {
+  @include dashboard;
+}
+.coupons-comp {
+  width: 100%;
+}

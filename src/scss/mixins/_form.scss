@@ -1,0 +1,86 @@
+@mixin add-item-form {
+  form {
+    width: 100%;
+    @include flex-container(row);
+    margin: 2rem 0;
+    align-content: space-between;
+    justify-content: space-between;
+  }
+  .form-section {
+    @include flex-container(row);
+
+    width: 100%;
+    margin-top: 2rem;
+
+    input {
+      width: 100%;
+      @include input;
+    }
+    input:focus,
+    input:hover,
+    textarea:focus,
+    textarea:hover {
+      @include input-focus;
+    }
+    label {
+      width: 100%;
+      text-align: start;
+    }
+    .input {
+      @include input;
+      align-self: stretch;
+      margin: 0;
+    }
+    .submit {
+      @include input;
+      border: none;
+      background-color: $primary;
+      transition: all 0.4s ease-in-out;
+    }
+    .submit:hover,
+    .submit:focus {
+      @include input-focus;
+      background-color: $black;
+      color: $primary;
+      padding-right: 60%;
+      font-weight: 700;
+    }
+    .submit:hover {
+      cursor: pointer;
+    }
+    .date {
+      @include input;
+      font-family: "Montserrat", sans-serif;
+    }
+    textarea {
+      width: 100%;
+      min-height: 8rem;
+      border: none;
+      background: $white;
+      font-family: "Montserrat", sans-serif;
+      border-bottom: $borderBottom;
+    }
+    select {
+      @include select;
+      text-transform: none;
+      font-weight: 400;
+      font-size: 1.6rem;
+    }
+  }
+
+  .close {
+    input {
+      @include input;
+    }
+  }
+  form input.ng-invalid.ng-touched {
+    border: 2px solid $danger;
+  }
+  form .help-text {
+    width: 100%;
+    color: lighten($black, 20);
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: $danger;
+  }
+}

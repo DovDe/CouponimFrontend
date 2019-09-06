@@ -1,0 +1,19 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins/mixins";
+
+.admin-dashboard {
+  @include flex-container(row);
+  width: 100%;
+  padding: 5rem 3rem;
+  margin: 0;
+}
+.customers-comp {
+  margin-top: 4rem;
+
+  width: 100%;
+}
+
+.companies-comp {
+  margin-top: 4rem;
+  width: 100%;
+}

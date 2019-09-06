@@ -1,0 +1,13 @@
+@import "../../../../scss/variables";
+@import "../../../../scss/mixins/mixins";
+
+.view {
+  padding-top: 4rem;
+}
+@include viewItem-main;
+@include viewItem-buttons;
+@include viewItem-head;
+@include viewItem-body;
+.main-content {
+  @include viewItem-main-content;
+}

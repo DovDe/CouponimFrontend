@@ -1,0 +1,29 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins/mixins";
+
+.dash-head-filters {
+  @include flex-container(row);
+}
+select {
+  margin-left: 1rem;
+}
+input {
+  margin-left: 1rem;
+  margin-right: 0;
+}
+select {
+  @include select;
+  @include flex-col;
+  align-self: stretch;
+  transition: $transition;
+}
+select:hover {
+  padding-left: 40%;
+  background: $primary;
+  color: $white;
+}
+input {
+  @include input;
+  @include flex-col;
+  // flex: 2;
+}
