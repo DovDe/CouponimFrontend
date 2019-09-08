@@ -1,9 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { LoginService } from "src/app/services/login.service";
 import { NgForm } from "@angular/forms";
-import { UserTypes } from "src/models/usertypeEnum";
-import { Login } from "src/models/login";
 
 @Component({
   selector: "app-login",
@@ -29,7 +27,6 @@ export class LoginComponent implements OnInit {
       resData => {
         this.isLoading = false;
         if (resData.token) {
-          sessionStorage.token = resData.token;
           this.loginService.loggedIn = true;
           this.router.navigate([`/${usertype}`]);
         }

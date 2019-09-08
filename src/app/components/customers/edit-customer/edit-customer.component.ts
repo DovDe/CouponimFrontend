@@ -26,7 +26,6 @@ export class EditCustomerComponent implements OnInit {
 
   ngOnInit() {
     this.customer = this.genService.customer;
-    console.log(this.customer);
   }
 
   updateCustomer() {

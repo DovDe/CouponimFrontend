@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable, throwError, Subject } from "rxjs";
-import { Login } from "src/models/login";
 import { catchError, tap } from "rxjs/operators";
 import { ActiveUser } from "src/models/active-user";
 
@@ -18,7 +17,11 @@ export class LoginService {
   public activeUser = new Subject<ActiveUser>();
   constructor(private http: HttpClient) {}
 
-  public login(login: Login): Observable<loginResponseData> {
+  public login(login: {
+    email: string;
+    password: string;
+    usertype: string;
+  }): Observable<loginResponseData> {
     let { email, password, usertype } = login;
     this.usertype = usertype;
     return this.http
@@ -60,49 +63,24 @@ export class LoginService {
   }
 
   private getUserInfo(token: string): void {
-    let expiration = new Date().getTime() + 1000 * 60 * 30;
-    let user;
+    let user = ActiveUser.getInstance();
+    user.usertype = this.usertype;
+    user.token = token;
 
     if (this.usertype === "administrator") {
-      user = new ActiveUser(
-        "Admin",
-        "administrator",
-        "1",
-        "admin@email.com",
-        "admin",
-        token,
-        expiration
-      );
+      user.name = "Admin";
+      user.email = "admin@email.com";
+      user.password = "admin";
       this.activeUser.next(user);
     } else {
       this.http
         .get<any>(`http://localhost:8080/${this.usertype}/${token}`)
         .subscribe(userInfo => {
-          switch (this.usertype) {
-            case "administrator":
-              break;
-            case "company":
-              user = new ActiveUser(
-                userInfo.name,
-                "company",
-                userInfo.id,
-                userInfo.email,
-                userInfo.password,
-                token,
-                expiration
-              );
-              break;
-            default:
-              user = new ActiveUser(
-                `${userInfo.firstName} ${userInfo.lastName}`,
-                "customer",
-                userInfo.id,
-                userInfo.email,
-                userInfo.password,
-                token,
-                expiration
-              );
-          }
+          user.email = userInfo.email;
+          user.password = userInfo.password;
+          user.name =
+            this.usertype == "company" ? userInfo.name : userInfo.firstName;
+
           this.activeUser.next(user);
         });
     }
