@@ -1,62 +1,37 @@
 <div class="login">
-  <h1>Couponim login</h1>
-  <!-- <app-alert
-    [message]="message"
-    *ngIf="error"
-    (close)="onHandleError()"
-  ></app-alert> -->
+  <div class="message">
+    <h2 *ngIf="error">{{ error }}</h2>
+  </div>
 
-  <form class="form">
+  <h1>Couponim login</h1>
+
+  <div class="spinner" *ngIf="isLoading">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <form
+    class="form"
+    #authForm="ngForm"
+    (ngSubmit)="login(authForm)"
+    *ngIf="!isLoading"
+  >
     <div class="radio">
-      <div class="radio_group">
+      <div class="radio_group" *ngFor="let type of usertypes">
         <input
-          class="radio_input admin_input"
+          required
+          [id]="type"
+          class="radio_input {{ type }}_input"
           type="radio"
           name="usertype"
-          id="admin"
-          value="administrator"
-          (change)="changeUserType($event)"
+          [value]="type"
+          [(ngModel)]="usertype"
         />
-        <label class="radio_label" for="admin"> admin</label>
-      </div>
-      <div class="radio_group">
-        <input
-          class="radio_input merchant_input"
-          type="radio"
-          name="usertype"
-          id="merchant"
-          value="company"
-          (change)="changeUserType($event)"
-        />
-        <label class="radio_label" for="merchant"> merchant</label>
-      </div>
-      <div class="radio_group">
-        <input
-          class="radio_input shopper_input"
-          type="radio"
-          name="usertype"
-          id="shoper"
-          value="customer"
-          (change)="changeUserType($event)"
-        />
-        <label class="radio_label " for="shoper">
-          Shopper
-        </label>
-      </div>
-      <!-- <div class="radio_group" *ngFor="let type of usertypes">
         <label [for]="type" class="radio_label">
-          <input
-            [id]="type"
-            class="radio_input {{ type }}_input"
-            type="radio"
-            name="usertype"
-            [value]="type"
-            [(ngModel)]="usertype"
-          />
           {{ type.toUpperCase() }}
         </label>
-      </div> -->
+      </div>
     </div>
+
     <div class="form-group">
       <input
         type="email"
@@ -64,21 +39,21 @@
         class="email"
         autocomplete="off"
         placeholder="Email"
-        [(ngModel)]="email"
+        ngModel
+        email
+        required
       />
       <input
         type="password"
         name="password"
         class="password"
         placeholder="Password"
-        [(ngModel)]="password"
+        ngModel
+        password
+        required
       />
     </div>
 
-    <input type="button" value="submit" (click)="login()" />
+    <input type="submit" [disabled]="!authForm.valid" value="submit" />
   </form>
-</div>
-
-<div class="message">
-  <h2 *ngIf="error">{{ message }}</h2>
 </div>

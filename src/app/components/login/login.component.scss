@@ -23,15 +23,20 @@
     @include input;
   }
 
-  input[type="button"] {
+  input[type="submit"] {
     @include input-submit;
     border: none;
     width: 100%;
   }
-  input[type="button"]:hover,
-  input[type="button"]:focus {
+  input[type="submit"]:hover,
+  input[type="submit"]:focus {
     @include input-submit-hover;
   }
+  input[type="submit"]:disabled {
+    background-color: lighten($black, 30);
+    color: darken($white, 20);
+  }
+
   .email,
   .password {
     margin-bottom: 2rem;
@@ -77,10 +82,14 @@
   width: 100%;
   color: $white;
   text-align: center;
-  padding: 2rem;
-  height: 5rem;
+  height: 8rem;
   margin-bottom: 3rem;
   h2 {
     background: $danger;
   }
+}
+.spinner {
+  width: 100%;
+  margin-top: 5rem;
+  text-align: center;
 }

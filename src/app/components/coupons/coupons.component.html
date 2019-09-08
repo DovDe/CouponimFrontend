@@ -4,7 +4,7 @@
       <h2>{{ title }}</h2>
       <app-filters
         usertype="{{ usertype }}"
-        (filter)="onFilter($event)"
+        (filter)="onFilter()"
       ></app-filters>
       <div
         class="fa-holder"
@@ -47,7 +47,7 @@
               *ngIf="usertype != 'customer'"
               type="button"
               value="delete"
-              (click)="onDelete(coup)"
+              (click)="onDelete()"
             />
           </div>
         </div>

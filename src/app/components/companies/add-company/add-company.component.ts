@@ -29,7 +29,7 @@ export class AddCompanyComponent implements OnInit {
 
   ngOnInit() {}
 
-  addItem() {
+  addItem(f) {
     this.genService.addItem(this.addForm.value, "company").subscribe(
       () => {
         this.close.emit();

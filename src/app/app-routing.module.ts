@@ -8,11 +8,13 @@ import { LandingComponent } from "./components/landing/landing.component";
 import { NotFoundComponent } from "./components/not-found/not-found.component";
 import { AuthGuardService } from "./services/auth-guard.service";
 import { ErrorComponent } from "./components/error/error.component";
+import { CouponResolverService } from "./services/coupon-resolver.service";
 
 const routes: Routes = [
   {
     path: "company",
     canActivate: [AuthGuardService],
+    resolve: [CouponResolverService],
     component: CompanyDashboardComponent
   },
   {

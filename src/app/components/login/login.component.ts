@@ -1,7 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { Router } from "@angular/router";
 import { LoginService } from "src/app/services/login.service";
-import { GeneralService } from "src/app/services/general.service";
+import { NgForm } from "@angular/forms";
+import { UserTypes } from "src/models/usertypeEnum";
+import { Login } from "src/models/login";
 
 @Component({
   selector: "app-login",
@@ -9,64 +11,34 @@ import { GeneralService } from "src/app/services/general.service";
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit {
+  public error: string;
   public usertype: string;
-  public password: string;
-  public email: string;
-  public message: string;
-  public error: boolean = false;
+  public usertypes: string[] = ["administrator", "company", "customer"];
+  public isLoading: boolean = false;
 
-  constructor(
-    private service: LoginService,
-    private router: Router,
-    private genService: GeneralService
-  ) {}
-  public usertypes = ["administrator", "company", "customer"];
-  ngOnInit() {
-    if (sessionStorage.usertype) {
-      this.router.navigate([`${sessionStorage.usertype}`]);
-    }
-  }
+  constructor(private loginService: LoginService, private router: Router) {}
 
-  public changeUserType(e) {
-    this.usertype = e.target.value;
-  }
+  ngOnInit() {}
 
-  login() {
-    let login = {
-      email: this.email,
-      password: this.password,
-      usertype: this.usertype
-    };
-    this.service.login(login).subscribe(
-      res => {
-        if (res.token) {
-          sessionStorage.token = res.token;
-          sessionStorage.usertype = this.usertype;
-          this.service.loggedIn = true;
-          this.service.usertype = this.usertype;
+  login(form: NgForm) {
+    if (!form.valid) return;
+    this.isLoading = true;
+    let { email, password, usertype } = form.value;
 
-          this.genService.getUserInfo().subscribe(data => {
-            this.service.user = data;
-          });
-
-          this.router.navigate([`/${this.usertype}`]);
+    this.loginService.login({ email, password, usertype }).subscribe(
+      resData => {
+        this.isLoading = false;
+        if (resData.token) {
+          sessionStorage.token = resData.token;
+          this.loginService.loggedIn = true;
+          this.router.navigate([`/${usertype}`]);
         }
       },
       err => {
-        this.error = true;
-        this.message = err.error;
-        setTimeout(() => {
-          this.message = null;
-          this.error = false;
-        }, 3000);
+        this.isLoading = false;
+        this.error = err;
       }
     );
-  }
-
-  onHandleError() {
-    // console.log("onHandleError");
-
-    this.error = false;
-    this.message = null;
+    form.reset();
   }
 }

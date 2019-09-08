@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from "@angular/core";
 import { Router } from "@angular/router";
 import { LoginService } from "src/app/services/login.service";
 import { GeneralService } from "src/app/services/general.service";
+import { Company } from "src/models/company";
+import { Customer } from "src/models/customer";
 
 @Component({
   selector: "app-nav",
@@ -19,7 +21,7 @@ export class NavComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.genService.getUserInfo().subscribe(user => {
+    this.authService.activeUser.subscribe(user => {
       this.user = user;
     });
   }
@@ -29,8 +31,8 @@ export class NavComponent implements OnInit {
 
     this.authService.logout(sessionStorage.token).subscribe(
       () => {
-        sessionStorage.usertype = "";
-        sessionStorage.token = "";
+        sessionStorage.removeItem("usertype");
+        sessionStorage.removeItem("token");
         this.router.navigate(["/home"]);
       },
       err => {

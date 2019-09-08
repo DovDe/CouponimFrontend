@@ -15,7 +15,6 @@ import { NavComponent } from "./components/nav/nav.component";
 import { LandingComponent } from "./components/landing/landing.component";
 import { IntroComponent } from "./components/intro/intro.component";
 import { FiltersComponent } from "./components/filters/filters.component";
-import { AlertComponent } from "./components/alert/alert.component";
 import { ModalComponent } from "./components/modal/modal.component";
 import { PlaceholderDirective } from "./directives/placeholder.directive";
 import { ViewCouponComponent } from "./components/coupons/view-coupon/view-coupon.component";
@@ -32,6 +31,7 @@ import { ErrorComponent } from "./components/error/error.component";
 import { EditCustomerComponent } from "./components/customers/edit-customer/edit-customer.component";
 import { EditCompanyComponent } from "./components/companies/edit-company/edit-company.component";
 import { EditCouponComponent } from "./components/coupons/edit-coupon/edit-coupon.component";
+import { LoadingSpinnerComponent } from "./components/shared/loading-spinner/loading-spinner.component";
 
 @NgModule({
   declarations: [
@@ -45,7 +45,6 @@ import { EditCouponComponent } from "./components/coupons/edit-coupon/edit-coupo
     LandingComponent,
     IntroComponent,
     FiltersComponent,
-    AlertComponent,
     ModalComponent,
     PlaceholderDirective,
     ViewCouponComponent,
@@ -61,7 +60,8 @@ import { EditCouponComponent } from "./components/coupons/edit-coupon/edit-coupo
     ErrorComponent,
     EditCustomerComponent,
     EditCompanyComponent,
-    EditCouponComponent
+    EditCouponComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,
