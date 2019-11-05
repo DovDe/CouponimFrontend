@@ -5,6 +5,7 @@ import { GeneralService } from "src/app/services/general.service";
 import { Coupon } from "src/models/coupon";
 import { Customer } from "src/models/customer";
 import { Company } from "src/models/company";
+import { DataStoreService } from "src/app/services/data-store.service";
 @Component({
   selector: "app-company-dashboard",
   templateUrl: "./company-dashboard.component.html",
@@ -19,44 +20,29 @@ export class CompanyDashboardComponent implements OnInit {
   public currentCompany: Company;
 
   public initialSections: ListElement[] = [
-    new ListElement("title", "Title", null, true, "text"),
-    new ListElement("categoryName", "Category", null, true, "select"),
-    new ListElement(
-      "startDate",
-      "Start Date",
-      'date: "dd/MM/yyyy"',
-      true,
-      "date"
-    ),
-    new ListElement("endDate", "End Date", 'date: "dd/MM/yyyy"', true, "date"),
-    new ListElement("amount", "Amount", null, true, "number"),
-    new ListElement("price", "Price", null, true, "number")
+    new ListElement("title", "Title", "text"),
+    new ListElement("categoryName", "Category", "select"),
+    new ListElement("startDate", "Start Date", "date"),
+    new ListElement("endDate", "End Date", "date"),
+    new ListElement("amount", "Amount", "number"),
+    new ListElement("price", "Price", "number")
   ];
 
   constructor(
-    private filterService: FilterService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    private dataStore: DataStoreService
   ) {}
 
   ngOnInit() {
-    this.generalService
-      .getItemArray("coupon", "company")
-      .subscribe(companyCoups => (this.coupons = companyCoups));
-
-    this.filterService.filter.subscribe(coupons => {
-      if (coupons) this.coupons = coupons;
+    this.generalService.getItemArray("coupon").subscribe(companyCoups => {
+      this.dataStore.companies.next(companyCoups);
+      this.dataStore.companyCouponsFiltered.next(companyCoups);
     });
-  }
 
-  // getCustomers() {
-  //   let customers = new Set();
-  //   this.coupons.forEach(c => {
-  //     c.customer.forEach(cust => {
-  //       customers.add(cust);
-  //     });
-  //   });
-  //   this.customers = Array.from(customers);
-  // }
+    this.dataStore.companyCouponsFiltered.subscribe(
+      cCoups => (this.coupons = cCoups)
+    );
+  }
 
   openOne(coup) {
     this.generalService.coupon = coup;

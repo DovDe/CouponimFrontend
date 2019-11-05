@@ -1,16 +1,17 @@
 import { Component, OnInit } from "@angular/core";
-import { GeneralService } from "src/app/services/general.service";
+import { LoginService } from "src/app/services/login.service";
+import { Router } from "@angular/router";
 @Component({
   selector: "app-layout",
   templateUrl: "./layout.component.html",
   styleUrls: ["./layout.component.scss"]
 })
 export class LayoutComponent implements OnInit {
-  public usertype: string;
-
-  constructor() {}
+  constructor(private authService: LoginService, private router: Router) {}
 
   ngOnInit() {
-    this.usertype = sessionStorage.usertype;
+    if (!!JSON.parse(sessionStorage.user)) {
+      this.authService.autoLogin();
+    }
   }
 }

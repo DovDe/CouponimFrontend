@@ -2,7 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { AngularFontAwesomeModule } from "angular-font-awesome";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { LoginComponent } from "./components/login/login.component";
@@ -32,6 +32,8 @@ import { EditCustomerComponent } from "./components/customers/edit-customer/edit
 import { EditCompanyComponent } from "./components/companies/edit-company/edit-company.component";
 import { EditCouponComponent } from "./components/coupons/edit-coupon/edit-coupon.component";
 import { LoadingSpinnerComponent } from "./components/shared/loading-spinner/loading-spinner.component";
+import { MessagesComponent } from "./components/shared/messages/messages.component";
+import { AuthInterceptorService } from "./services/auth-interceptor.service";
 
 @NgModule({
   declarations: [
@@ -61,7 +63,8 @@ import { LoadingSpinnerComponent } from "./components/shared/loading-spinner/loa
     EditCustomerComponent,
     EditCompanyComponent,
     EditCouponComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +73,13 @@ import { LoadingSpinnerComponent } from "./components/shared/loading-spinner/loa
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [LayoutComponent],
   entryComponents: [
     ModalComponent,

@@ -5,6 +5,7 @@
       <app-filters
         usertype="{{ usertype }}"
         (filter)="onFilter()"
+        title="{{ title }}"
       ></app-filters>
       <div
         class="fa-holder"
@@ -26,7 +27,7 @@
     </div>
 
     <div class="coup_info">
-      <div class="coup_row" *ngFor="let coup of coupons">
+      <div class="coup_row" *ngFor="let coup of reactiveCoupons">
         <div class="coup_row_data">
           <span class="{{ item.dbName }}" *ngFor="let item of sections">
             {{ coup[item.dbName] }}</span

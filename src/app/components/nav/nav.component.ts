@@ -1,36 +1,27 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit, OnChanges } from "@angular/core";
 import { LoginService } from "src/app/services/login.service";
 import { ActiveUser } from "src/models/active-user";
+import { GeneralService } from "src/app/services/general.service";
 
 @Component({
   selector: "app-nav",
   templateUrl: "./nav.component.html",
   styleUrls: ["./nav.component.scss"]
 })
-export class NavComponent implements OnInit {
-  public user: ActiveUser | undefined = undefined;
-
-  constructor(private router: Router, private authService: LoginService) {}
+export class NavComponent implements OnInit, OnChanges {
+  public user: ActiveUser;
+  public name: string;
+  constructor(private authService: LoginService) {}
 
   ngOnInit() {
-    if (this.user == undefined) {
-      this.authService.activeUser.subscribe(user => {
-        this.user = user;
-      });
-    }
+    this.authService.activeUser.subscribe(user => (this.user = user));
+    this.authService.name.subscribe(name => (this.name = name));
   }
 
+  ngOnChanges() {
+    this.authService.name.subscribe(name => (this.name = name));
+  }
   logout() {
-    this.authService.logout(sessionStorage.token).subscribe(
-      () => {
-        sessionStorage.removeItem("token");
-        this.user = undefined;
-        this.router.navigate(["/home"]);
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    this.authService.logout(this.user.token);
   }
 }

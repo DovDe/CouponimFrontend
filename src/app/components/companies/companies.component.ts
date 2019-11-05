@@ -14,8 +14,8 @@ export class CompaniesComponent implements OnInit {
   public currentCompanies: Company[];
 
   @Input() public sections: ListElement[] = [
-    new ListElement("name", "Name", null, true, "text"),
-    new ListElement("email", "Email", null, true, "email"),
+    new ListElement("name", "Name", "text"),
+    new ListElement("email", "Email", "email"),
     new ListElement()
   ];
   public isLoading = false;
@@ -35,12 +35,10 @@ export class CompaniesComponent implements OnInit {
 
   getCompanies() {
     this.isLoading = true;
-    this.genService
-      .getItemArray("company", this.usertype)
-      .subscribe(compArr => {
-        this.isLoading = false;
-        this.currentCompanies = compArr;
-      });
+    this.genService.getItemArray("company").subscribe(compArr => {
+      this.isLoading = false;
+      this.currentCompanies = compArr;
+    });
   }
   clickedRowButton(comp: Company, event) {
     this.openOne.emit(comp);

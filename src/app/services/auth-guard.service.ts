@@ -13,24 +13,13 @@ import { LoginService } from "./login.service";
 })
 export class AuthGuardService implements CanActivate {
   constructor(private authService: LoginService, private router: Router) {}
-
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    // if (this.authService.loggedIn == true) return true;
     let toRoute = route.url[0].path;
-    return true;
-    // switch (toRoute) {
-    //   case "administrator":
-    //     return sessionStorage.usertype == "administrator";
-    //   case "company":
-    //     return sessionStorage.usertype == "company";
-    //   case "customer":
-    //     return sessionStorage.usertype == "customer";
-    //   default:
-    //     break;
-    // }
-    // this.router.navigate(["/home"]);
+    let checkAuth = this.authService.user.usertype == toRoute;
+    if (checkAuth) return true;
+    else this.router.navigate(["/home"]);
   }
 }

@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild
-} from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Customer } from "src/models/customer";
 import { ListElement } from "src/models/listElement";
 import { GeneralService } from "src/app/services/general.service";
@@ -17,13 +10,13 @@ import { Router } from "@angular/router";
   styleUrls: ["./customers.component.scss"]
 })
 export class CustomersComponent implements OnInit {
-  @Input() public customers: Customer[];
+  public customers: Customer[];
   public currentCustomers: Customer[];
 
   @Input() public sections: ListElement[] = [
-    new ListElement("firstName", "First Name", null, true, "text"),
-    new ListElement("lastName", "Last Name", null, true, "text"),
-    new ListElement("email", "Email", null, true, "email")
+    new ListElement("firstName", "First Name", "text"),
+    new ListElement("lastName", "Last Name", "text"),
+    new ListElement("email", "Email", "email")
   ];
   public isLoading: boolean = false;
   @Output() openOne = new EventEmitter<Customer>();
@@ -47,6 +40,7 @@ export class CustomersComponent implements OnInit {
   }
 
   onClose() {
+    this.getCustomers();
     this.viewType = null;
     this.viewOne = false;
   }
@@ -56,12 +50,10 @@ export class CustomersComponent implements OnInit {
   }
   getCustomers() {
     this.isLoading = true;
-    this.genService
-      .getItemArray("customer", this.usertype)
-      .subscribe(custArr => {
-        this.isLoading = false;
-        this.currentCustomers = custArr;
-      });
+    this.genService.getItemArray("customer").subscribe(custArr => {
+      this.isLoading = false;
+      this.customers = custArr;
+    });
   }
 
   onDelete(customer: Customer) {

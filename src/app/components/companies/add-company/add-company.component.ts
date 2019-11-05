@@ -21,9 +21,9 @@ export class AddCompanyComponent implements OnInit {
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
   public sections: ListElement[] = [
-    new ListElement("name", "Name", null, true, "text"),
-    new ListElement("email", "Email", null, true, "email"),
-    new ListElement("password", "Password", null, true, "password")
+    new ListElement("name", "Name", "text"),
+    new ListElement("email", "Email", "email"),
+    new ListElement("password", "Password", "password")
   ];
   constructor(private genService: GeneralService, private router: Router) {}
 

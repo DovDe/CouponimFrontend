@@ -9,6 +9,8 @@ import { GeneralService } from "src/app/services/general.service";
 import { Customer } from "src/models/customer";
 import { Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
+import { LoginService } from "src/app/services/login.service";
+import { ActiveUser } from "src/models/active-user";
 
 @Component({
   selector: "app-edit-customer",
@@ -17,28 +19,36 @@ import { NgForm } from "@angular/forms";
 })
 export class EditCustomerComponent implements OnInit {
   public customer: Customer;
-  public oldPassword: string;
+  public firstName: string;
+  public lastName: string;
+  private user: ActiveUser;
   @ViewChild("f", { static: true }) editCustomer: NgForm;
 
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private genService: GeneralService, private router: Router) {}
+  constructor(
+    private genService: GeneralService,
+    private router: Router,
+    private authService: LoginService
+  ) {}
 
   ngOnInit() {
     this.customer = this.genService.customer;
+
+    this.authService.activeUser.subscribe(user => {
+      this.user = user;
+    });
   }
 
   updateCustomer() {
-    if (this.oldPassword == this.customer.password) {
-      this.genService.updateItem(this.customer, "customer").subscribe(
-        () => {
-          this.close.emit();
-          this.router.navigate(["/home"]);
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    }
+    this.genService.updateItem(this.customer, "customer").subscribe(
+      () => {
+        this.close.emit();
+        // this.router.navigate([`/home`]);
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 }

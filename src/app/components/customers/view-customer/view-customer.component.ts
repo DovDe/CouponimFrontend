@@ -12,9 +12,9 @@ import { Customer } from "src/models/customer";
 export class ViewCustomerComponent implements OnInit {
   public customer: Customer;
   public sections: ListElement[] = [
-    new ListElement("firstName", "First Name", null, true, "text"),
-    new ListElement("lastName", "Last Name", null, true, "text"),
-    new ListElement("email", "Email", null, true, "email")
+    new ListElement("firstName", "First Name", "text"),
+    new ListElement("lastName", "Last Name", "text"),
+    new ListElement("email", "Email", "email")
   ];
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
 

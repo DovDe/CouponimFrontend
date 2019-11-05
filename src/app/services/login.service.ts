@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Observable, throwError, Subject } from "rxjs";
+import { Observable, throwError, Subject, BehaviorSubject } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { ActiveUser } from "src/models/active-user";
+import { Router } from "@angular/router";
 
 interface loginResponseData {
   token: string;
@@ -12,10 +13,16 @@ interface loginResponseData {
   providedIn: "root"
 })
 export class LoginService {
+  public activeUser = new BehaviorSubject<ActiveUser>(null);
+
   public loggedIn: boolean;
   public usertype: string;
-  public activeUser = new Subject<ActiveUser>();
-  constructor(private http: HttpClient) {}
+  public user: ActiveUser;
+  public name = new BehaviorSubject<string>(null);
+
+  constructor(private http: HttpClient, private router: Router) {
+    this.activeUser.subscribe(user => (this.user = user));
+  }
 
   public login(login: {
     email: string;
@@ -31,16 +38,20 @@ export class LoginService {
       )
       .pipe(
         catchError(this.handleError),
-        tap(resData => {
-          this.handelAuth(resData);
-        })
+        tap(this.handelAuth)
       );
   }
 
-  public logout(token): Observable<any> {
-    sessionStorage.removeItem(token);
+  public logout(token): void {
+    this.user = null;
     this.activeUser.next(null);
-    return this.http.post<any>(`http://localhost:8080/logout/${token}`, {});
+    this.http
+      .post<any>(`http://localhost:8080/logout/${token}`, {})
+      .subscribe(() => {
+        sessionStorage.removeItem("name");
+        sessionStorage.removeItem("user");
+        this.router.navigate(["/home"]);
+      });
   }
 
   private handleError(errRes: HttpErrorResponse) {
@@ -56,33 +67,20 @@ export class LoginService {
 
   private handelAuth(resData) {
     let { token } = resData;
-    if (token) {
-      this.getUserInfo(token);
-      sessionStorage.token = token;
-    }
+    if (!token) throwError("No Token Recieved Server Side Error");
   }
 
-  private getUserInfo(token: string): void {
-    let user = ActiveUser.getInstance();
-    user.usertype = this.usertype;
-    user.token = token;
-
-    if (this.usertype === "administrator") {
-      user.name = "Admin";
-      user.email = "admin@email.com";
-      user.password = "admin";
-      this.activeUser.next(user);
-    } else {
-      this.http
-        .get<any>(`http://localhost:8080/${this.usertype}/${token}`)
-        .subscribe(userInfo => {
-          user.email = userInfo.email;
-          user.password = userInfo.password;
-          user.name =
-            this.usertype == "company" ? userInfo.name : userInfo.firstName;
-
-          this.activeUser.next(user);
-        });
-    }
+  autoLogin() {
+    const userData = JSON.parse(sessionStorage.getItem("user"));
+    if (!userData) return;
+    if (userData.tokenExpiration < new Date().getTime()) return;
+    const loadedUser: ActiveUser = ActiveUser.getInstance();
+    loadedUser.usertype = userData.usertype;
+    loadedUser.token = userData.token;
+    loadedUser.tokenExpiration = userData.tokenExpiration;
+    this.user = loadedUser;
+    this.activeUser.next(loadedUser);
+    let name = sessionStorage.name;
+    this.name.next(name);
   }
 }

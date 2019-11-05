@@ -18,24 +18,24 @@ export class AdminDashboardComponent implements OnInit {
   public showingOne: boolean = false;
 
   public custSections: ListElement[] = [
-    new ListElement("firstName", "First Name", null, true, "text"),
-    new ListElement("lastName", "Last Name", null, true, "text"),
-    new ListElement("email", "Email", null, true, "email")
+    new ListElement("firstName", "First Name", "text"),
+    new ListElement("lastName", "Last Name", "text"),
+    new ListElement("email", "Email", "email")
   ];
   public compSections: ListElement[] = [
-    new ListElement("name", "Name", null, true, "text"),
-    new ListElement("email", "Email", null, true, "email"),
+    new ListElement("name", "Name", "text"),
+    new ListElement("email", "Email", "email"),
     new ListElement()
   ];
   constructor(private genService: GeneralService) {}
 
   ngOnInit() {
     this.genService
-      .getItemArray("customer", "administrator")
+      .getItemArray("customer")
       .subscribe(res => (this.customers = res), err => console.log(err));
 
     this.genService
-      .getItemArray("company", "administrator")
+      .getItemArray("company")
       .subscribe(items => (this.companies = items), err => console.log(err));
   }
 

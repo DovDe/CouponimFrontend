@@ -7,14 +7,11 @@ import { LoginComponent } from "./components/login/login.component";
 import { LandingComponent } from "./components/landing/landing.component";
 import { NotFoundComponent } from "./components/not-found/not-found.component";
 import { AuthGuardService } from "./services/auth-guard.service";
-import { ErrorComponent } from "./components/error/error.component";
-import { CouponResolverService } from "./services/coupon-resolver.service";
 
 const routes: Routes = [
   {
     path: "company",
     canActivate: [AuthGuardService],
-    resolve: [CouponResolverService],
     component: CompanyDashboardComponent
   },
   {
@@ -27,16 +24,10 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     component: CustomerDashboardComponent
   },
-  { path: "login", component: LoginComponent },
   { path: "home", component: LandingComponent },
-  // { path: "404", component: NotFoundComponent },
-  {
-    path: "error",
-    component: ErrorComponent,
-    data: { message: "page not found" }
-  },
-  { path: "", redirectTo: "home", pathMatch: "full" },
-  { path: "**", redirectTo: "/error" }
+  { path: "404", component: NotFoundComponent },
+  { path: "", redirectTo: "/home", pathMatch: "full" },
+  { path: "**", redirectTo: "/404" }
 ];
 
 @NgModule({

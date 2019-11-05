@@ -2,11 +2,7 @@ export class ActiveUser {
   private static instance: ActiveUser;
 
   private constructor(
-    public name?: string,
     public usertype?: string,
-    public id?: string,
-    public email?: string,
-    public password?: string,
     private _token?: string,
     private _tokenExpiration?: number
   ) {}
@@ -17,8 +13,14 @@ export class ActiveUser {
     return this._token;
   }
   set token(token: string) {
-    this._tokenExpiration = new Date().getTime() + 1000 * 60 * 30;
     this._token = token;
+  }
+
+  get tokenExpiration() {
+    return this._tokenExpiration;
+  }
+  set tokenExpiration(exp: number) {
+    this._tokenExpiration = exp;
   }
   static getInstance() {
     if (!ActiveUser.instance) {

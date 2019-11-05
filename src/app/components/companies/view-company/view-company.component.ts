@@ -13,8 +13,8 @@ export class ViewCompanyComponent implements OnInit {
   public company: Company;
 
   public sections: ListElement[] = [
-    new ListElement("name", "Name", null, true, "text"),
-    new ListElement("email", "Email", null, true, "email")
+    new ListElement("name", "Name", "text"),
+    new ListElement("email", "Email", "email")
   ];
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
 
