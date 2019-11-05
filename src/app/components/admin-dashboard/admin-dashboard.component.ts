@@ -4,6 +4,7 @@ import { Customer } from "src/models/customer";
 import { ListElement } from "src/models/listElement";
 import { GeneralService } from "src/app/services/general.service";
 import { Company } from "src/models/company";
+import { DataStoreService } from "src/app/services/data-store.service";
 
 @Component({
   selector: "app-admin-dashboard",
@@ -16,23 +17,23 @@ export class AdminDashboardComponent implements OnInit {
   public companies: Company[];
 
   public showingOne: boolean = false;
+  public compSections: ListElement[];
+  public custSections: ListElement[];
 
-  public custSections: ListElement[] = [
-    new ListElement("firstName", "First Name", "text"),
-    new ListElement("lastName", "Last Name", "text"),
-    new ListElement("email", "Email", "email")
-  ];
-  public compSections: ListElement[] = [
-    new ListElement("name", "Name", "text"),
-    new ListElement("email", "Email", "email"),
-    new ListElement()
-  ];
-  constructor(private genService: GeneralService) {}
+  constructor(
+    private genService: GeneralService,
+    private dataStore: DataStoreService
+  ) {
+    this.compSections = this.dataStore.compSections;
+    this.custSections = this.dataStore.custSections;
+  }
 
   ngOnInit() {
-    this.genService
-      .getItemArray("customer")
-      .subscribe(res => (this.customers = res), err => console.log(err));
+    this.genService.getItemArray("customer").subscribe(
+      customers => this.dataStore.customers.next(customers),
+
+      err => console.log(err)
+    );
 
     this.genService
       .getItemArray("company")
@@ -42,10 +43,8 @@ export class AdminDashboardComponent implements OnInit {
   openOne(event, itemType) {
     if (itemType == "customer") {
       this.genService.customer = event;
-      // this.genService.customersEmiter.emit(event);
     } else {
       this.genService.company = event;
-      // this.genService.companiesEmiter.emit(event);
     }
 
     this.ngOnInit();

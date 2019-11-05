@@ -21,6 +21,8 @@ export class DataStoreService {
   public customers = new BehaviorSubject<Customer[]>(null);
   public companies = new BehaviorSubject<Company[]>(null);
 
+  public clickedCoupon = new BehaviorSubject<any>(null);
+
   // Creates the coupon table sections to view and inputs to edit
   public coupSections: ListElement[] = [
     new ListElement("title", "Title", "text"),
@@ -37,6 +39,17 @@ export class DataStoreService {
     new ListElement("price", "Price", "number")
   ];
 
+  //Admin sections
+  public custSections: ListElement[] = [
+    new ListElement("firstName", "First Name", "text"),
+    new ListElement("lastName", "Last Name", "text"),
+    new ListElement("email", "Email", "email")
+  ];
+  public compSections: ListElement[] = [
+    new ListElement("name", "Name", "text"),
+    new ListElement("email", "Email", "email"),
+    new ListElement()
+  ];
   constructor(private genService: GeneralService) {}
 
   /**
@@ -95,5 +108,12 @@ export class DataStoreService {
         });
       })
     );
+  }
+
+  setCompanyCoupons() {
+    this.genService.getItemArray("coupon").subscribe(coupons => {
+      this.allCoupons.next(coupons);
+      this.companyCouponsFiltered.next(coupons);
+    });
   }
 }

@@ -3,6 +3,7 @@ import { Customer } from "src/models/customer";
 import { ListElement } from "src/models/listElement";
 import { GeneralService } from "src/app/services/general.service";
 import { Router } from "@angular/router";
+import { DataStoreService } from "src/app/services/data-store.service";
 
 @Component({
   selector: "app-customers",
@@ -25,12 +26,14 @@ export class CustomersComponent implements OnInit {
   public viewType: string;
   public viewOne: boolean = false;
 
-  constructor(private genService: GeneralService, private router: Router) {}
+  constructor(
+    private genService: GeneralService,
+    private router: Router,
+    private dataStore: DataStoreService
+  ) {}
 
   ngOnInit() {
-    if (this.customers == undefined && !this.viewOne) {
-      this.getCustomers();
-    }
+    this.getCustomers();
   }
 
   clickedRowButton(cust: Customer, event) {
@@ -50,9 +53,9 @@ export class CustomersComponent implements OnInit {
   }
   getCustomers() {
     this.isLoading = true;
-    this.genService.getItemArray("customer").subscribe(custArr => {
+    this.dataStore.customers.subscribe(customers => {
+      this.customers = customers;
       this.isLoading = false;
-      this.customers = custArr;
     });
   }
 

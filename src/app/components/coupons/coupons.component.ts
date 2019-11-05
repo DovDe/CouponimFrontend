@@ -11,7 +11,6 @@ import { DataStoreService } from "src/app/services/data-store.service";
   styleUrls: ["./coupons.component.scss"]
 })
 export class CouponsComponent implements OnInit {
-  @Input() public coupons: Coupon[];
   public reactiveCoupons: Coupon[];
 
   public currentCoupons: Coupon[];
@@ -59,9 +58,10 @@ export class CouponsComponent implements OnInit {
     this.viewOne = false;
   }
 
-  onDelete() {}
-
-  onFilter() {
-    // this.coupons;
+  onDelete(coup) {
+    this.genService.deleteItem(coup, "coupon").subscribe(() => {
+      if (this.usertype == "customer") this.dataStore.setCustomerCoupons();
+      else this.dataStore.setCompanyCoupons();
+    });
   }
 }
