@@ -26,7 +26,6 @@
     @include flex-container(row);
     justify-content: space-between;
     min-height: 4rem;
-    border-bottom: 1px solid rgba($primary, 0.4);
     color: $primary;
 
     .fa-holder {

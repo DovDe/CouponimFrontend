@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Observable, throwError, Subject, BehaviorSubject } from "rxjs";
+import { Observable, throwError, BehaviorSubject, interval } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { ActiveUser } from "src/models/active-user";
 import { Router } from "@angular/router";
+import { MessageService } from "./message.service";
 
 interface loginResponseData {
   token: string;
@@ -20,7 +21,11 @@ export class LoginService {
   public user: ActiveUser;
   public name = new BehaviorSubject<string>(null);
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private messageService: MessageService
+  ) {
     this.activeUser.subscribe(user => (this.user = user));
   }
 
@@ -36,18 +41,24 @@ export class LoginService {
         `http://localhost:8080/login?email=${email}&password=${password}&type=${usertype}`,
         {}
       )
-      .pipe(
-        catchError(this.handleError),
-        tap(this.handelAuth)
-      );
+      .pipe(catchError(this.handleError), tap(this.handelAuth));
   }
 
-  public logout(token): void {
+  public logout(message: string): void {
+    let token;
+    if (!!sessionStorage.getItem("user"))
+      token = JSON.parse(sessionStorage.getItem("user")).tokenExpiration;
+    else token = this.user.token;
+
     this.user = null;
     this.activeUser.next(null);
     this.http
       .post<any>(`http://localhost:8080/logout/${token}`, {})
       .subscribe(() => {
+        this.messageService.message.next(
+          message || `${sessionStorage.getItem("name")} has been logged out`
+        );
+        this.name.next(null);
         sessionStorage.removeItem("name");
         sessionStorage.removeItem("user");
         this.router.navigate(["/home"]);
@@ -70,10 +81,27 @@ export class LoginService {
     if (!token) throwError("No Token Recieved Server Side Error");
   }
 
+  checkLoggedInLoop() {
+    return interval(1000 * 60).subscribe(() => {
+      if (!!sessionStorage.getItem("user")) {
+        let tokenExpiration = JSON.parse(sessionStorage.getItem("user"))
+          .tokenExpiration;
+
+        if (tokenExpiration < Date.now()) {
+          this.logout(
+            "token no longer valid user logged out please login to continue use of app"
+          );
+        }
+      }
+    });
+  }
   autoLogin() {
     const userData = JSON.parse(sessionStorage.getItem("user"));
-    if (!userData) return;
-    if (userData.tokenExpiration < new Date().getTime()) return;
+    if (!userData || userData.tokenExpiration < new Date().getTime()) {
+      sessionStorage.clear();
+      this.router.navigate(["/home"]);
+      return;
+    }
     const loadedUser: ActiveUser = ActiveUser.getInstance();
     loadedUser.usertype = userData.usertype;
     loadedUser.token = userData.token;

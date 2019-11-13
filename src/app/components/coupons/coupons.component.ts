@@ -2,8 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Coupon } from "src/models/coupon";
 import { ListElement } from "src/models/listElement";
 import { GeneralService } from "src/app/services/general.service";
-import { FilterService } from "src/app/services/filter.service";
 import { DataStoreService } from "src/app/services/data-store.service";
+import { LoginService } from "src/app/services/login.service";
+import { MessageService } from "src/app/services/message.service";
 
 @Component({
   selector: "app-coupons",
@@ -15,7 +16,7 @@ export class CouponsComponent implements OnInit {
 
   public currentCoupons: Coupon[];
   @Input() public sections: ListElement[];
-  @Input() public usertype: string;
+  public usertype: string;
   @Input() public title: string;
   public viewType: string;
   public viewOne: boolean = false;
@@ -24,10 +25,15 @@ export class CouponsComponent implements OnInit {
 
   constructor(
     private genService: GeneralService,
-    private dataStore: DataStoreService
+    private dataStore: DataStoreService,
+    private authService: LoginService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
+    this.authService.activeUser.subscribe(user => {
+      if (!!user) this.usertype = user.usertype;
+    });
     this.dataStore.availableCouponsFiltered.subscribe(avCoups => {
       if (avCoups != null && this.title == "Available Coupons")
         this.reactiveCoupons = [...avCoups];
@@ -59,9 +65,12 @@ export class CouponsComponent implements OnInit {
   }
 
   onDelete(coup) {
-    this.genService.deleteItem(coup, "coupon").subscribe(() => {
-      if (this.usertype == "customer") this.dataStore.setCustomerCoupons();
-      else this.dataStore.setCompanyCoupons();
-    });
+    this.genService.deleteItem(coup, "coupon").subscribe(
+      () => {
+        if (this.usertype == "customer") this.dataStore.setCustomerCoupons();
+        else this.dataStore.setCompanyCoupons();
+      },
+      err => this.messageService.message.next("Error deleting Coupon: " + err)
+    );
   }
 }

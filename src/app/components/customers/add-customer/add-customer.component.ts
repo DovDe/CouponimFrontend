@@ -1,14 +1,11 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  EventEmitter,
-  Output
-} from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { GeneralService } from "src/app/services/general.service";
 import { Router } from "@angular/router";
-// import { ListElement } from "src/models/listElement";
+import { ListElement } from "src/models/listElement";
+import lists from "../../../../utils/lists";
+import { MustMatch } from "src/utils/formValidators";
+import { MessageService } from "src/app/services/message.service";
 
 @Component({
   selector: "app-add-customer",
@@ -16,27 +13,63 @@ import { Router } from "@angular/router";
   styleUrls: ["./add-customer.component.scss"]
 })
 export class AddCustomerComponent implements OnInit {
-  @ViewChild("f", { static: true }) addForm: NgForm;
-  public firstname: string;
-  public lastname: string;
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private genService: GeneralService, private router: Router) {}
+  public sections: ListElement[] = lists.adminDashUpdateCustomer;
+  constructor(
+    private genService: GeneralService,
+    private router: Router,
+    private messageService: MessageService
+  ) {}
 
-  ngOnInit() {}
+  public addCustomerForm: FormGroup;
+
+  ngOnInit() {
+    this.addCustomerForm = new FormGroup(
+      {
+        firstName: new FormControl(null, [
+          Validators.required,
+          Validators.minLength(1)
+        ]),
+        lastName: new FormControl(null, [
+          Validators.required,
+          Validators.minLength(1)
+        ]),
+        email: new FormControl(null, [Validators.required, Validators.email]),
+        password: new FormControl(null, [
+          Validators.required,
+          Validators.minLength(4)
+        ]),
+        confirmPassword: new FormControl(null, [Validators.required])
+      },
+      MustMatch("password", "confirmPassword").bind(this)
+    );
+  }
+
+  isValid(i) {
+    let val = this.addCustomerForm.get(`${this.sections[i].dbName}`);
+    return val.touched && val.invalid;
+  }
+  getSection(i) {
+    return this.addCustomerForm.get(`${this.sections[i].dbName}`);
+  }
 
   addCustomer() {
-    this.genService.addItem(this.addForm.value, "customer").subscribe(
-      () => {
-        this.addForm.reset();
-        this.close.emit();
-        this.router.navigate(["/home"]);
-      },
-      err => {
-        console.log(err);
-        this.router.navigate(["/administrator"]);
-      }
-    );
-    console.log(this.addForm);
+    if (this.addCustomerForm.invalid) {
+      this.messageService.message.next("The form is invalid please fix errors");
+    } else {
+      this.genService.addItem(this.addCustomerForm.value, "customer").subscribe(
+        () => {
+          this.messageService.message.next(
+            `${
+              this.addCustomerForm.get("firstName").value
+            } was added to customers`
+          );
+          this.close.emit();
+          this.router.navigate(["/home"]);
+        },
+        err => this.messageService.message.next(err)
+      );
+    }
   }
 }

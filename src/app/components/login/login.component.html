@@ -1,7 +1,7 @@
 <div class="login">
-  <div class="message">
+  <!-- <div class="message">
     <h2 *ngIf="error">{{ error }}</h2>
-  </div>
+  </div> -->
 
   <h1>Couponim login</h1>
 
@@ -32,28 +32,41 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <input
-        type="email"
-        name="email"
-        class="email"
-        autocomplete="off"
-        placeholder="Email"
-        ngModel
-        email
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        class="password"
-        placeholder="Password"
-        ngModel
-        password
-        required
-      />
+    <div class="form-section">
+      <div class="form-group">
+        <input
+          type="email"
+          name="email"
+          class="email"
+          autocomplete="off"
+          placeholder="Email"
+          ngModel
+          email
+          #email="ngModel"
+          required
+        />
+        <span *ngIf="!email.valid && email.touched"
+          >Please enter a valid email</span
+        >
+      </div>
+
+      <div class="form-group">
+        <input
+          type="password"
+          name="password"
+          class="password"
+          placeholder="Password"
+          ngModel
+          password
+          #password="ngModel"
+          required
+        />
+        <span *ngIf="!password.valid && password.touched"
+          >Please fill out a password</span
+        >
+      </div>
     </div>
 
-    <input type="submit" [disabled]="!authForm.valid" value="submit" />
+    <input type="submit" value="submit" />
   </form>
 </div>

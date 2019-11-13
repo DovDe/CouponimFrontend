@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, EventEmitter } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ListElement } from "src/models/listElement";
-import { FilterService } from "src/app/services/filter.service";
 import { GeneralService } from "src/app/services/general.service";
 import { Coupon } from "src/models/coupon";
-import { Customer } from "src/models/customer";
-import { Company } from "src/models/company";
 import { DataStoreService } from "src/app/services/data-store.service";
+import lists from "../../../utils/lists";
+import { MessageService } from "src/app/services/message.service";
 @Component({
   selector: "app-company-dashboard",
   templateUrl: "./company-dashboard.component.html",
@@ -13,39 +12,33 @@ import { DataStoreService } from "src/app/services/data-store.service";
 })
 export class CompanyDashboardComponent implements OnInit {
   public coupons: Coupon[];
-  public customers: Customer[];
   public showingOne: boolean = false;
 
-  @Input()
-  public currentCompany: Company;
-
-  public initialSections: ListElement[] = [
-    new ListElement("title", "Title", "text"),
-    new ListElement("categoryName", "Category", "select"),
-    new ListElement("startDate", "Start Date", "date"),
-    new ListElement("endDate", "End Date", "date"),
-    new ListElement("amount", "Amount", "number"),
-    new ListElement("price", "Price", "number")
-  ];
+  public initialSections: ListElement[] = lists.companyDashCoupons;
 
   constructor(
     private generalService: GeneralService,
-    private dataStore: DataStoreService
+    private dataStore: DataStoreService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
-    this.generalService.getItemArray("coupon").subscribe(companyCoups => {
-      this.dataStore.companies.next(companyCoups);
-      this.dataStore.companyCouponsFiltered.next(companyCoups);
-    });
+    this.generalService.getItemArray("coupon").subscribe(
+      companyCoups => {
+        this.dataStore.companies.next(companyCoups);
+        this.dataStore.companyCouponsFiltered.next(companyCoups);
+      },
+      err => this.messageService.message.next(err)
+    );
 
     this.dataStore.companyCouponsFiltered.subscribe(
-      cCoups => (this.coupons = cCoups)
+      cCoups => (this.coupons = cCoups),
+      err => this.messageService.message.next(err)
     );
   }
 
   openOne(coup) {
-    this.generalService.coupon = coup;
+    this.dataStore.coupon.next(coup);
     this.ngOnInit();
   }
 }

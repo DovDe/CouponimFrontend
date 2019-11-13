@@ -1,1 +1,3 @@
-<p>messages works!</p>
+<div class="messages" *ngIf="message" [@divState]>
+  <p>{{ message }}</p>
+</div>

@@ -2,11 +2,7 @@
   <div class="couplist">
     <div class="dash-head">
       <h2>{{ title }}</h2>
-      <app-filters
-        usertype="{{ usertype }}"
-        (filter)="onFilter()"
-        title="{{ title }}"
-      ></app-filters>
+      <app-filters usertype="{{ usertype }}" title="{{ title }}"></app-filters>
       <div
         class="fa-holder"
         *ngIf="usertype != 'customer'"

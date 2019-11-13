@@ -4,6 +4,8 @@ import { LoginService } from "src/app/services/login.service";
 import { NgForm } from "@angular/forms";
 import { ActiveUser } from "src/models/active-user";
 import { GeneralService } from "src/app/services/general.service";
+import { DataStoreService } from "src/app/services/data-store.service";
+import { MessageService } from "src/app/services/message.service";
 
 @Component({
   selector: "app-login",
@@ -18,11 +20,18 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: LoginService,
     private router: Router,
-    private genService: GeneralService
+    private genService: GeneralService,
+    private dataStore: DataStoreService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
     this.usertype = this.usertypes[2];
+    let user = JSON.parse(sessionStorage.getItem("user"));
+    if (!!user) {
+      if (user.tokenExpiration > Date.now()) this.authService.autoLogin();
+    }
+    this.authService.checkLoggedInLoop();
   }
 
   login(form: NgForm) {
@@ -55,7 +64,7 @@ export class LoginComponent implements OnInit {
           }
         },
         err => {
-          console.log("error " + err);
+          this.messageService.message.next(err);
 
           this.isLoading = false;
           this.error = err;
@@ -65,6 +74,7 @@ export class LoginComponent implements OnInit {
         // if (!sessionStorage.user) return;
         if (JSON.parse(sessionStorage.user).usertype !== "administrator") {
           this.genService.getUserInfo().subscribe(userInfo => {
+            this.dataStore.userInfo.next(userInfo);
             let name = userInfo.firstName || userInfo.name;
             this.authService.name.next(name);
             sessionStorage.setItem("name", name);

@@ -10,8 +10,7 @@ export class LayoutComponent implements OnInit {
   constructor(private authService: LoginService, private router: Router) {}
 
   ngOnInit() {
-    if (sessionStorage.getItem("user") !== null) {
+    if (JSON.parse(sessionStorage.getItem("user")) !== null)
       this.authService.autoLogin();
-    }
   }
 }

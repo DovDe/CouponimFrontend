@@ -1,67 +1,51 @@
 <div class="edit">
-  <form #f="ngForm" (ngSubmit)="updateCoupon()">
+  <form [formGroup]="updateCouponForm" (ngSubmit)="updateCoupon()">
     <div class="form-section">
-      <!-- <label for="title">Title</label
-      ><input type="text" name="title" [(ngModel)]="coupon.title" /> -->
-      <h2>{{ coupon.title }}</h2>
+      <h2>Edit {{ coupon.title }}</h2>
     </div>
 
     <div class="form-section">
       <label for="category">Category</label>
-      <select
-        name="categoryName"
-        [(ngModel)]="coupon.categoryName"
-        id="category"
-      >
+      <select name="categoryName" id="category" formControlName="categoryName">
         <option disabled></option>
         <option value="food">Food</option>
         <option value="vacation">Vacation</option>
         <option value="electronic">Electronics</option>
       </select>
     </div>
-    <div class="form-section">
-      <div class="form-section date-input">
-        <label for="startDate">Start Date</label>
-        <input
-          class="date"
-          type="date"
-          name="startDate"
-          id="startDate"
-          [(ngModel)]="coupon.startDate"
-        />
-      </div>
-      <div class="form-section date-input">
-        <label for="endDate">End Date</label>
-        <input
-          class="date"
-          type="date"
-          name="endDate"
-          [(ngModel)]="coupon.endDate"
-        />
-      </div>
-      <div class="form-section">
-        <label for="description">Description</label>
-        <textarea
-          name="description"
-          [(ngModel)]="coupon.description"
-        ></textarea>
-      </div>
 
-      <div class="form-section">
-        <label for="amount">Inventory</label>
-        <input type="number" name="amount" [(ngModel)]="coupon.amount" />
+    <div class="form-section">
+      <label for="description">Description</label>
+      <textarea name="description" formControlName="description"></textarea>
+    </div>
+
+    <div class="form-section" *ngFor="let section of sections; let i = index">
+      <label for="section.dbName">{{ section.htmlText }}</label>
+      <input
+        type="{{ section.inputType }}"
+        formControlName="{{ section.dbName }}"
+        name="{{ section.dbName }}"
+      />
+      <div *ngIf="isValid(i)" class="help-text">
+        <span *ngIf="getSection(i).errors.required" class="help-text"
+          >{{ section.htmlText }} is required</span
+        >
+        <span *ngIf="getSection(i).errors.minlength" class="help-text"
+          >{{ section.htmlText }} needs to be at least 4 characters long</span
+        >
+        <span *ngIf="getSection(i).errors.email" class="help-text"
+          >please enter a valid email</span
+        >
       </div>
-      <div class="form-section">
-        <label for="price">Price</label>
-        <input type="number" name="price" [(ngModel)]="coupon.price" />
+    </div>
+    <div class="form-section">
+      <div class="image">
+        <img *ngIf="!!coupon" src="{{ coupon.image }}" alt="" />
       </div>
-      <div class="form-section">
-        <div class="image">
-          <img src="{{ coupon.image }}" alt="" />
-        </div>
-        <label for="image">Image URL</label>
-        <input type="text" name="image" [(ngModel)]="coupon.image" id="image" />
-      </div>
+      <label for="image">Image URL</label>
+      <input type="text" name="image" id="image" formControlName="image" />
+    </div>
+    <div class="form-section">
       <input class="submit" type="submit" value="Submit" />
     </div>
   </form>

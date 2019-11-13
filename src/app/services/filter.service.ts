@@ -35,11 +35,11 @@ export class FilterService {
       filterValue == null
     ) {
       return this.http.get<Coupon[]>(
-        `${this.BASEURL}${this.user.usertype}/coupon/${this.user.token}`
+        `${this.BASEURL}${this.user.usertype}/coupon`
       );
     } else {
       let str1 = `${this.BASEURL}${this.user.usertype}/`,
-        str2 = `coupon/${filterType}/${filterValue}/${this.user.token}`;
+        str2 = `coupon/${filterType}/${filterValue}`;
       if (filterTitle == "Available Coupons")
         return this.http.get<Coupon[]>(`${str1}all/${str2}`);
       else return this.http.get<Coupon[]>(`${str1}${str2}`);

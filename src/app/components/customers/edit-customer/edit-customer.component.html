@@ -1,34 +1,28 @@
 <div class="edit">
-  <form #f="ngForm" (ngSubmit)="updateCustomer()">
-    <div class="allowed">
-      <div class="form-section">
-        <label for="firstname">First Name</label>
-        <input name="firstName" type="text" [(ngModel)]="customer.firstName" />
-        <span></span>
+  <h2>Edit {{ customer.firstName }}'s Info</h2>
+  <form [formGroup]="updateCustomerForm" (ngSubmit)="updateCustomer()">
+    <div class="form-section" *ngFor="let section of sections; let i = index">
+      <label for="section.dbName">{{ section.htmlText }}</label>
+      <input
+        type="{{ section.inputType }}"
+        formControlName="{{ section.dbName }}"
+        name="{{ section.dbName }}"
+      />
+      <div *ngIf="isValid(i)" class="help-text">
+        <span *ngIf="getSection(i).errors.required" class="help-text"
+          >{{ section.htmlText }} is required</span
+        >
+        <span *ngIf="getSection(i).errors.minlength" class="help-text"
+          >{{ section.htmlText }} needs to be at least 4 characters long</span
+        >
+        <span *ngIf="getSection(i).errors.email" class="help-text"
+          >please enter a valid email</span
+        >
       </div>
+    </div>
 
-      <div class="form-section">
-        <label for="lastname">Last Name</label
-        ><input name="lastName" type="text" [(ngModel)]="customer.lastName" />
-      </div>
-
-      <div class="form-section">
-        <label for="email">Email</label
-        ><input type="email" name="email" email [(ngModel)]="customer.email" />
-      </div>
-
-      <div class="form-section">
-        <label for="password">Password</label
-        ><input
-          name="newPassword"
-          type="password"
-          [(ngModel)]="customer.password"
-        />
-      </div>
-
-      <div class="form-section">
-        <input class="submit" type="submit" value="Submit" />
-      </div>
+    <div class="form-section">
+      <input class="submit" type="submit" value="Submit" />
     </div>
   </form>
 </div>

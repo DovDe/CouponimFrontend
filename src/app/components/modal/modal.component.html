@@ -1,14 +1,12 @@
 <div class="backdrop" (click)="onClose()"></div>
 <div class="modal-box">
   <div class="header">
-    <h2>{{ header }}</h2>
+    <h2 *ngIf="viewType != 'userinfo'"></h2>
+    <h2 *ngIf="viewType == 'userinfo'"></h2>
     <div class="fa-holder" (click)="onClose()">
       <fa name="times-circle"></fa>
     </div>
-    <!-- <button class="button" (click)="onClose()">X</button> -->
   </div>
-
   <ng-template appPlaceholder></ng-template>
-
   <div class="modal-box-actions"></div>
 </div>

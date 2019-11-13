@@ -4,6 +4,9 @@ import { Coupon } from "src/models/coupon";
 import { Router } from "@angular/router";
 import { ListElement } from "src/models/listElement";
 import { DataStoreService } from "src/app/services/data-store.service";
+import lists from "../../../../utils/lists";
+import { LoginService } from "src/app/services/login.service";
+import { MessageService } from "src/app/services/message.service";
 
 @Component({
   selector: "app-view-coupon",
@@ -12,42 +15,41 @@ import { DataStoreService } from "src/app/services/data-store.service";
 })
 export class ViewCouponComponent implements OnInit {
   public coupon: Coupon;
-  public newCoupon: Coupon;
-  public rightSection: ListElement[];
+  public rightSection: ListElement[] = lists.couponsViewRightSection;
   public usertype: string;
+
   @Input() public purchased: boolean;
 
   constructor(
     private genService: GeneralService,
     private router: Router,
+    private authService: LoginService,
+    private messageService: MessageService,
     private dataStore: DataStoreService
   ) {}
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
   @Output() reload = new EventEmitter<Coupon>();
 
   ngOnInit() {
-    this.coupon = this.genService.coupon;
-    this.usertype = JSON.parse(sessionStorage.user).usertype;
+    this.dataStore.coupon.subscribe(
+      coupon => (this.coupon = coupon),
+      err => this.messageService.message.next(err)
+    );
+
+    this.authService.activeUser.subscribe(
+      user => (this.usertype = user.usertype),
+      err => this.messageService.message.next(err)
+    );
     this.purchased = this.genService.purchased;
-    this.rightSection = this.dataStore.couponsViewRightSection;
   }
 
-  deleteCoupon() {
-    this.genService.deleteItem(this.coupon, "coupon").subscribe(
+  purchaseCoupon() {
+    this.genService.purchaseCoupon(this.coupon).subscribe(
       () => {
         this.close.emit();
         this.router.navigate(["/home"]);
       },
-      err => {
-        console.log(err);
-      }
+      err => this.messageService.message.next(err)
     );
-  }
-
-  purchaseCoupon() {
-    this.genService.purchaseCoupon(this.coupon).subscribe(coup => {
-      this.close.emit();
-      this.router.navigate(["/home"]);
-    });
   }
 }

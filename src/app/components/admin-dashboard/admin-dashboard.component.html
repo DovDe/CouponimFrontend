@@ -3,16 +3,11 @@
   <div></div>
   <app-customers
     class="customers-comp"
-    usertype="administrator"
-    [sections]="custSections"
     (openOne)="openOne($event, 'customer')"
   ></app-customers>
 
   <app-companies
-    [companies]="companies"
     class="companies-comp"
-    usertype="administrator"
-    [sections]="compSections"
     (openOne)="openOne($event, 'company')"
   ></app-companies>
 </div>

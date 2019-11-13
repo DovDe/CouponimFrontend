@@ -65,13 +65,18 @@
       background: darken($white, 5);
     }
     .dash_row_data:hover input:hover {
-      background: $white;
+      background: $black;
       color: $primary;
     }
     .dash_row_data:hover {
       background: $primary;
       box-shadow: $boxShadow;
       cursor: pointer;
+    }
+
+    .dash_row_data:hover input {
+      background: $white;
+      color: $primary;
     }
   }
   .dash_row {

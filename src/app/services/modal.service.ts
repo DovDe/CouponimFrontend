@@ -8,6 +8,8 @@ import { AddCompanyComponent } from "../components/companies/add-company/add-com
 import { EditCustomerComponent } from "../components/customers/edit-customer/edit-customer.component";
 import { EditCompanyComponent } from "../components/companies/edit-company/edit-company.component";
 import { EditCouponComponent } from "../components/coupons/edit-coupon/edit-coupon.component";
+import { UserinfoCompanyComponent } from "../components/userinfo-company/userinfo-company.component";
+import { UserinfoCustomerComponent } from "../components/userinfo-customer/userinfo-customer.component";
 
 @Injectable({
   providedIn: "root"
@@ -22,7 +24,9 @@ export class ModalService {
     editcustomer: EditCustomerComponent,
     viewcompany: ViewCompanyComponent,
     addcompany: AddCompanyComponent,
-    editcompany: EditCompanyComponent
+    editcompany: EditCompanyComponent,
+    userinfocompany: UserinfoCompanyComponent,
+    userinfocustomer: UserinfoCustomerComponent
   };
   constructor() {}
 

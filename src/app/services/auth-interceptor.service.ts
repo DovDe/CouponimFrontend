@@ -17,6 +17,15 @@ export class AuthInterceptorService implements HttpInterceptor {
       exhaustMap(user => {
         let modReq;
         if (!user) return next.handle(req);
+        let seshUser = JSON.parse(sessionStorage.getItem("user"));
+        if (
+          seshUser.tokenExpiration < Date.now() ||
+          user.tokenExpiration < Date.now()
+        ) {
+          this.authService.logout(
+            "user is no longer validated please login again"
+          );
+        }
         modReq = req.clone({ ...req, url: `${req.url}/${user.token}` });
         return next.handle(modReq);
       })

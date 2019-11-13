@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { ListElement } from "src/models/listElement";
-import { GeneralService } from "src/app/services/general.service";
-import { Router } from "@angular/router";
 import { Customer } from "src/models/customer";
-
+import lists from "../../../../utils/lists";
+import { DataStoreService } from "src/app/services/data-store.service";
+import { MessageService } from "src/app/services/message.service";
 @Component({
   selector: "app-view-customer",
   templateUrl: "./view-customer.component.html",
@@ -11,28 +11,20 @@ import { Customer } from "src/models/customer";
 })
 export class ViewCustomerComponent implements OnInit {
   public customer: Customer;
-  public sections: ListElement[] = [
-    new ListElement("firstName", "First Name", "text"),
-    new ListElement("lastName", "Last Name", "text"),
-    new ListElement("email", "Email", "email")
-  ];
+
+  public sections: ListElement[] = lists.adminDashCustomerSections;
+
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private genService: GeneralService, private router: Router) {}
+  constructor(
+    private dataStore: DataStoreService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
-    this.customer = this.genService.customer;
-  }
-
-  onDelete() {
-    this.genService.deleteItem(this.customer, "customer").subscribe(
-      () => {
-        this.close.emit();
-        this.router.navigate(["/home"]);
-      },
-      err => {
-        console.log(err);
-      }
+    this.dataStore.customer.subscribe(
+      customer => (this.customer = customer),
+      err => this.messageService.message.next(err)
     );
   }
 }

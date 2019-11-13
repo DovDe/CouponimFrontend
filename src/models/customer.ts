@@ -1,5 +1,3 @@
-import { Coupon } from "./coupon";
-
 export class Customer {
   constructor(
     public id?: number,

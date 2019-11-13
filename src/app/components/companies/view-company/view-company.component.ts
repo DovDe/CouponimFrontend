@@ -1,8 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { ListElement } from "src/models/listElement";
-import { GeneralService } from "src/app/services/general.service";
-import { Router } from "@angular/router";
 import { Company } from "src/models/company";
+import lists from "../../../../utils/lists";
+import { DataStoreService } from "src/app/services/data-store.service";
+import { MessageService } from "src/app/services/message.service";
 
 @Component({
   selector: "app-view-company",
@@ -11,40 +12,18 @@ import { Company } from "src/models/company";
 })
 export class ViewCompanyComponent implements OnInit {
   public company: Company;
-
-  public sections: ListElement[] = [
-    new ListElement("name", "Name", "text"),
-    new ListElement("email", "Email", "email")
-  ];
+  public sections: ListElement[] = lists.viewCompanySections;
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private genService: GeneralService, private router: Router) {}
+  constructor(
+    private dataStore: DataStoreService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
-    this.company = this.genService.company;
-  }
-
-  // onUpdate() {
-  //   this.genService.updateItem(this.newCompany, "company").subscribe(
-  //     () => {
-  //       this.close.emit();
-  //       this.router.navigate(["/home"]);
-  //     },
-  //     err => {
-  //       console.log(err);
-  //     }
-  //   );
-  // }
-
-  onDelete() {
-    this.genService.deleteItem(this.company, "company").subscribe(
-      () => {
-        this.close.emit();
-        this.router.navigate(["/home"]);
-      },
-      err => {
-        console.log(err);
-      }
+    this.dataStore.company.subscribe(
+      company => (this.company = company),
+      err => this.messageService.message.next(err)
     );
   }
 }

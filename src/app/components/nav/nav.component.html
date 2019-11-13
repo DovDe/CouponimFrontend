@@ -4,7 +4,11 @@
     <div>
       <span *ngIf="user">Welcome {{ name }} </span>
     </div>
-    <div *ngIf="user" class="fa-holder">
+    <div
+      *ngIf="user && user.usertype != 'administrator'"
+      class="fa-holder"
+      (click)="openUserInfo()"
+    >
       <fa name="cog"></fa>
     </div>
     <div class="fa-holder" *ngIf="user" (click)="logout()">
@@ -12,3 +16,9 @@
     </div>
   </div>
 </nav>
+<app-modal
+  *ngIf="viewOne"
+  viewType="userinfo"
+  [parentType]="parentType"
+  (close)="onClose()"
+></app-modal>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ListElement } from "src/models/listElement";
-import { GeneralService } from "src/app/services/general.service";
 import { Coupon } from "src/models/coupon";
 import { DataStoreService } from "src/app/services/data-store.service";
+import lists from "../../../utils/lists";
 
 @Component({
   selector: "app-customer-dashboard",
@@ -17,12 +17,9 @@ export class CustomerDashboardComponent implements OnInit {
   public usertype: string;
   public currentCouponFilterType: string;
 
-  public coupSections: ListElement[] = [...this.dataStore.coupSections];
+  public coupSections: ListElement[] = [...lists.customerDashCouponSections];
 
-  constructor(
-    private genService: GeneralService,
-    private dataStore: DataStoreService
-  ) {}
+  constructor(private dataStore: DataStoreService) {}
 
   ngOnInit() {
     this.dataStore.purchasedCoupons.subscribe(
@@ -35,12 +32,7 @@ export class CustomerDashboardComponent implements OnInit {
   }
 
   openOne(event, itemType) {
-    if (itemType == "coupon") {
-      this.genService.coupon = event;
-    } else {
-      this.genService.company = event;
-    }
-
+    this.dataStore[itemType].next(event);
     this.ngOnInit();
   }
 }

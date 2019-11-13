@@ -1,12 +1,24 @@
 <div class="add">
-  <form (ngSubmit)="addItem(f)" #f="ngForm">
-    <div class="form-section" *ngFor="let section of sections">
+  <h2>Add A New Company</h2>
+  <form (ngSubmit)="addItem()" [formGroup]="addCompanyForm">
+    <div class="form-section" *ngFor="let section of sections; let i = index">
       <label for="section.dbName">{{ section.htmlText }}</label>
       <input
         type="{{ section.inputType }}"
-        ngModel
+        formControlName="{{ section.dbName }}"
         name="{{ section.dbName }}"
       />
+      <div *ngIf="isValid(i)" class="help-text">
+        <span *ngIf="getSection(i).errors.required" class="help-text"
+          >{{ section.htmlText }} is required</span
+        >
+        <span *ngIf="getSection(i).errors.minlength" class="help-text"
+          >{{ section.htmlText }} needs to be at least 4 characters long</span
+        >
+        <span *ngIf="getSection(i).errors.email" class="help-text"
+          >please enter a valid email</span
+        >
+      </div>
     </div>
     <div class="form-section">
       <input class="submit" type="submit" value="Submit" />

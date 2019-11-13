@@ -4,12 +4,15 @@ import { Coupon } from "src/models/coupon";
 import { Customer } from "src/models/customer";
 import { Company } from "src/models/company";
 import { GeneralService } from "./general.service";
-import { ListElement } from "src/models/listElement";
 
 @Injectable({
   providedIn: "root"
 })
 export class DataStoreService {
+  public coupon = new BehaviorSubject<Coupon>(null);
+  public customer = new BehaviorSubject<Customer>(null);
+  public company = new BehaviorSubject<Company>(null);
+
   public availableCoupons = new BehaviorSubject<Coupon[]>(null);
   public purchasedCoupons = new BehaviorSubject<Coupon[]>(null);
 
@@ -23,33 +26,8 @@ export class DataStoreService {
 
   public clickedCoupon = new BehaviorSubject<any>(null);
 
-  // Creates the coupon table sections to view and inputs to edit
-  public coupSections: ListElement[] = [
-    new ListElement("title", "Title", "text"),
-    new ListElement("categoryName", "Category", "select"),
-    new ListElement("startDate", "Start Date", "date"),
-    new ListElement("endDate", "End Date", "date"),
-    new ListElement("price", "Price", "number")
-  ];
+  public userInfo = new BehaviorSubject<any>(null);
 
-  public couponsViewRightSection = [
-    new ListElement("startDate", "Start Date", "date"),
-    new ListElement("endDate", "End Date", "date"),
-    new ListElement("amount", "Amount", "text"),
-    new ListElement("price", "Price", "number")
-  ];
-
-  //Admin sections
-  public custSections: ListElement[] = [
-    new ListElement("firstName", "First Name", "text"),
-    new ListElement("lastName", "Last Name", "text"),
-    new ListElement("email", "Email", "email")
-  ];
-  public compSections: ListElement[] = [
-    new ListElement("name", "Name", "text"),
-    new ListElement("email", "Email", "email"),
-    new ListElement()
-  ];
   constructor(private genService: GeneralService) {}
 
   /**

@@ -3,6 +3,9 @@ import { Company } from "src/models/company";
 import { ListElement } from "src/models/listElement";
 import { GeneralService } from "src/app/services/general.service";
 import { Router } from "@angular/router";
+import lists from "../../../utils/lists";
+import { DataStoreService } from "src/app/services/data-store.service";
+import { MessageService } from "src/app/services/message.service";
 
 @Component({
   selector: "app-companies",
@@ -10,36 +13,27 @@ import { Router } from "@angular/router";
   styleUrls: ["./companies.component.scss"]
 })
 export class CompaniesComponent implements OnInit {
-  @Input() public companies: Company[];
-  public currentCompanies: Company[];
+  public companies: Company[];
+  public sections: ListElement[] = lists.adminDashCompanySections;
 
-  @Input() public sections: ListElement[] = [
-    new ListElement("name", "Name", "text"),
-    new ListElement("email", "Email", "email"),
-    new ListElement()
-  ];
-  public isLoading = false;
   @Output() openOne = new EventEmitter<Company>();
-  @Input() usertype;
-
   public viewType: string;
   public viewOne: boolean = false;
 
-  constructor(private genService: GeneralService, private router: Router) {}
+  constructor(
+    private genService: GeneralService,
+    private router: Router,
+    private dataStore: DataStoreService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
-    if (this.companies == undefined && !this.viewOne) {
-      this.getCompanies();
-    }
+    this.dataStore.companies.subscribe(
+      companies => (this.companies = companies),
+      err => this.messageService.message.next(err)
+    );
   }
 
-  getCompanies() {
-    this.isLoading = true;
-    this.genService.getItemArray("company").subscribe(compArr => {
-      this.isLoading = false;
-      this.currentCompanies = compArr;
-    });
-  }
   clickedRowButton(comp: Company, event) {
     this.openOne.emit(comp);
     this.viewType = event.target.value;
@@ -56,14 +50,14 @@ export class CompaniesComponent implements OnInit {
   }
 
   onDelete(company: Company) {
+    let name = company.name;
     this.genService.deleteItem(company, "company").subscribe(
       () => {
+        this.messageService.message.next(`${name} was removed from companies`);
         this.onClose();
         this.router.navigate(["/home"]);
       },
-      err => {
-        console.log(err);
-      }
+      err => this.messageService.message.next(err)
     );
   }
 }

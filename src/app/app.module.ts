@@ -1,8 +1,9 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { AngularFontAwesomeModule } from "angular-font-awesome";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { LoginComponent } from "./components/login/login.component";
@@ -25,7 +26,6 @@ import { AddCustomerComponent } from "./components/customers/add-customer/add-cu
 import { CompaniesComponent } from "./components/companies/companies.component";
 import { ViewCompanyComponent } from "./components/companies/view-company/view-company.component";
 import { AddCompanyComponent } from "./components/companies/add-company/add-company.component";
-import { PurchaseCouponComponent } from "./components/coupons/purchase-coupon/purchase-coupon.component";
 import { NotFoundComponent } from "./components/not-found/not-found.component";
 import { ErrorComponent } from "./components/error/error.component";
 import { EditCustomerComponent } from "./components/customers/edit-customer/edit-customer.component";
@@ -34,7 +34,8 @@ import { EditCouponComponent } from "./components/coupons/edit-coupon/edit-coupo
 import { LoadingSpinnerComponent } from "./components/shared/loading-spinner/loading-spinner.component";
 import { MessagesComponent } from "./components/shared/messages/messages.component";
 import { AuthInterceptorService } from "./services/auth-interceptor.service";
-
+import { UserinfoCompanyComponent } from "./components/userinfo-company/userinfo-company.component";
+import { UserinfoCustomerComponent } from "./components/userinfo-customer/userinfo-customer.component";
 @NgModule({
   declarations: [
     LoginComponent,
@@ -57,21 +58,24 @@ import { AuthInterceptorService } from "./services/auth-interceptor.service";
     CompaniesComponent,
     ViewCompanyComponent,
     AddCompanyComponent,
-    PurchaseCouponComponent,
     NotFoundComponent,
     ErrorComponent,
     EditCustomerComponent,
     EditCompanyComponent,
     EditCouponComponent,
     LoadingSpinnerComponent,
-    MessagesComponent
+    MessagesComponent,
+    UserinfoCompanyComponent,
+    UserinfoCustomerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFontAwesomeModule,
     FormsModule,
-    HttpClientModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {
@@ -92,7 +96,8 @@ import { AuthInterceptorService } from "./services/auth-interceptor.service";
     ViewCompanyComponent,
     AddCompanyComponent,
     EditCompanyComponent,
-    PurchaseCouponComponent
+    UserinfoCompanyComponent,
+    UserinfoCustomerComponent
   ]
 })
 export class AppModule {}
