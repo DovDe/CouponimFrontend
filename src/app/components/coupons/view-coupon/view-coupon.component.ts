@@ -46,6 +46,7 @@ export class ViewCouponComponent implements OnInit {
   purchaseCoupon() {
     this.genService.purchaseCoupon(this.coupon).subscribe(
       () => {
+        this.messageService.message.next(`${this.coupon.title} purchased`);
         this.close.emit();
         this.router.navigate(["/home"]);
       },

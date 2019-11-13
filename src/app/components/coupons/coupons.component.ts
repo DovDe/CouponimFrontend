@@ -65,8 +65,10 @@ export class CouponsComponent implements OnInit {
   }
 
   onDelete(coup) {
+    let title = coup.title;
     this.genService.deleteItem(coup, "coupon").subscribe(
       () => {
+        this.messageService.message.next(`${title} was deleted`);
         if (this.usertype == "customer") this.dataStore.setCustomerCoupons();
         else this.dataStore.setCompanyCoupons();
       },

@@ -16,7 +16,8 @@ let el = {
     "confirmPassword",
     "Confirm Password",
     "password"
-  )
+  ),
+  image: new ListElement("image", "Image URL", "text")
 };
 export default {
   customerDashCouponSections: [
@@ -47,5 +48,13 @@ export default {
     el.price
   ],
   editCouponSections: [el.startDate, el.endDate, el.amount, el.price],
-  editCompanySections: [el.email, el.password, el.confirmPassword]
+  editCompanySections: [el.email, el.password, el.confirmPassword],
+  addCouponSections: [
+    el.title,
+    el.startDate,
+    el.endDate,
+    el.amount,
+    el.price,
+    el.image
+  ]
 };

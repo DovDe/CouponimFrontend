@@ -5,6 +5,7 @@ import { GeneralService } from "src/app/services/general.service";
 import { Router } from "@angular/router";
 import { DataStoreService } from "src/app/services/data-store.service";
 import lists from "../../../utils/lists";
+import { MessageService } from "src/app/services/message.service";
 
 @Component({
   selector: "app-customers",
@@ -24,7 +25,8 @@ export class CustomersComponent implements OnInit {
   constructor(
     private genService: GeneralService,
     private router: Router,
-    private dataStore: DataStoreService
+    private dataStore: DataStoreService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -55,14 +57,17 @@ export class CustomersComponent implements OnInit {
   }
 
   onDelete(customer: Customer) {
+    let name = customer.firstName;
     this.genService.deleteItem(customer, "customer").subscribe(
       () => {
+        let customers = this.customers.filter(cust => {
+          return cust != customer;
+        });
+        this.messageService.message.next(`${name} was deleted`);
+        this.dataStore.customers.next(customers);
         this.onClose();
-        this.router.navigate(["/home"]);
       },
-      err => {
-        console.log(err);
-      }
+      err => this.messageService.message.next(err)
     );
   }
 }

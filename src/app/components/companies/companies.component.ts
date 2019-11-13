@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Company } from "src/models/company";
 import { ListElement } from "src/models/listElement";
 import { GeneralService } from "src/app/services/general.service";
-import { Router } from "@angular/router";
 import lists from "../../../utils/lists";
 import { DataStoreService } from "src/app/services/data-store.service";
 import { MessageService } from "src/app/services/message.service";
@@ -22,7 +21,6 @@ export class CompaniesComponent implements OnInit {
 
   constructor(
     private genService: GeneralService,
-    private router: Router,
     private dataStore: DataStoreService,
     private messageService: MessageService
   ) {}
@@ -54,8 +52,11 @@ export class CompaniesComponent implements OnInit {
     this.genService.deleteItem(company, "company").subscribe(
       () => {
         this.messageService.message.next(`${name} was removed from companies`);
+        let companies = this.companies.filter(comp => {
+          return company != comp;
+        });
+        this.dataStore.companies.next(companies);
         this.onClose();
-        this.router.navigate(["/home"]);
       },
       err => this.messageService.message.next(err)
     );

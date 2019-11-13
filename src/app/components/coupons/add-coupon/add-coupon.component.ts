@@ -5,6 +5,8 @@ import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ListElement } from "src/models/listElement";
 import { MessageService } from "src/app/services/message.service";
+import lists from "../../../../utils/lists";
+import { checkDateFromNow, dateRangeValidator } from "src/utils/formValidators";
 
 @Component({
   selector: "app-add-coupon",
@@ -14,14 +16,7 @@ import { MessageService } from "src/app/services/message.service";
 export class AddCouponComponent implements OnInit {
   public newCoupon: Coupon = new Coupon();
   public addCouponForm: FormGroup;
-  public sections: ListElement[] = [
-    new ListElement("title", "Title", "text"),
-    new ListElement("startDate", "Start Date", "date"),
-    new ListElement("endDate", "End Date", "date"),
-    new ListElement("amount", "Inventory", "number"),
-    new ListElement("price", "Price", "number"),
-    new ListElement("image", "Image URL", "text")
-  ];
+  public sections: ListElement[] = lists.addCouponSections;
   constructor(
     private genService: GeneralService,
     private router: Router,
@@ -31,16 +26,22 @@ export class AddCouponComponent implements OnInit {
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
   ngOnInit() {
-    this.addCouponForm = new FormGroup({
-      categoryName: new FormControl(null, [Validators.required]),
-      title: new FormControl(null, [Validators.required]),
-      startDate: new FormControl(null, [Validators.required]),
-      endDate: new FormControl(null, [Validators.required]),
-      description: new FormControl(null),
-      amount: new FormControl(null, [Validators.required]),
-      price: new FormControl(null, [Validators.required]),
-      image: new FormControl(null, [Validators.required])
-    });
+    this.addCouponForm = new FormGroup(
+      {
+        categoryName: new FormControl(null, [Validators.required]),
+        title: new FormControl(null, [Validators.required]),
+        startDate: new FormControl(null, [
+          Validators.required,
+          checkDateFromNow()
+        ]),
+        endDate: new FormControl(null, [Validators.required]),
+        description: new FormControl(null),
+        amount: new FormControl(null, [Validators.required]),
+        price: new FormControl(null, [Validators.required]),
+        image: new FormControl(null, [Validators.required])
+      },
+      { validators: [dateRangeValidator] }
+    );
   }
 
   isValid(i) {
@@ -50,12 +51,18 @@ export class AddCouponComponent implements OnInit {
   getSection(i) {
     return this.addCouponForm.get(`${this.sections[i].dbName}`);
   }
+  checkDateError() {
+    let arr = [];
+    for (let key in this.addCouponForm.errors) {
+      arr.push(key);
+    }
+    return arr.includes("range");
+  }
 
   addCoupon() {
-    if (this.addCouponForm.status == "INVALID") {
-      this.close.emit();
-      this.router.navigate(["/home"]);
-    } else {
+    if (this.addCouponForm.invalid)
+      this.messageService.message.next("The form is invalid please fix it");
+    else {
       this.genService.addItem(this.addCouponForm.value, "coupon").subscribe(
         () => {
           this.messageService.message.next(
