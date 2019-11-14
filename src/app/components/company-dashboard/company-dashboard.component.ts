@@ -14,6 +14,7 @@ export class CompanyDashboardComponent implements OnInit {
   public coupons: Coupon[];
   public showingOne: boolean = false;
 
+  // load coupon section from utils/lists
   public initialSections: ListElement[] = lists.companyDashCoupons;
 
   constructor(
@@ -23,20 +24,24 @@ export class CompanyDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // get companies from DB
     this.generalService.getItemArray("coupon").subscribe(
       companyCoups => {
-        this.dataStore.companies.next(companyCoups);
+        //store companies and filtered companies in dataStore service
+        this.dataStore.allCoupons.next(companyCoups);
         this.dataStore.companyCouponsFiltered.next(companyCoups);
       },
       err => this.messageService.message.next(err)
     );
 
+    // load filtered coupons from dataStore and set local variable
     this.dataStore.companyCouponsFiltered.subscribe(
       cCoups => (this.coupons = cCoups),
       err => this.messageService.message.next(err)
     );
   }
 
+  // method to open modal with selected coupon
   openOne(coup) {
     this.dataStore.coupon.next(coup);
     this.ngOnInit();

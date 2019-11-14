@@ -17,6 +17,8 @@ export class AdminDashboardComponent implements OnInit {
   public companies: Company[];
 
   public showingOne: boolean = false;
+
+  // load table lists from utils/lists
   public compSections: ListElement[] = lists.adminDashCompanySections;
   public custSections: ListElement[] = lists.adminDashCustomerSections;
 
@@ -27,17 +29,20 @@ export class AdminDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // load customers and store customers in dataStore service
     this.genService.getItemArray("customer").subscribe(
       customers => this.dataStore.customers.next(customers),
       err => this.messageService.message.next(err)
     );
 
+    // load companies and store companies in dataStore service
     this.genService.getItemArray("company").subscribe(
       companies => this.dataStore.companies.next(companies),
       err => this.messageService.message.next(err)
     );
   }
 
+  // store proper data in dataStore and open modal method
   openOne(event, itemType) {
     this.dataStore[itemType].next(event);
     this.ngOnInit();

@@ -12,7 +12,10 @@ import { MessageService } from "src/app/services/message.service";
 })
 export class ViewCompanyComponent implements OnInit {
   public company: Company;
+
+  // load table sections from utils/lists
   public sections: ListElement[] = lists.viewCompanySections;
+  // call method to close modal emitted to parent component
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
@@ -21,6 +24,7 @@ export class ViewCompanyComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // load company from dataStore
     this.dataStore.company.subscribe(
       company => (this.company = company),
       err => this.messageService.message.next(err)

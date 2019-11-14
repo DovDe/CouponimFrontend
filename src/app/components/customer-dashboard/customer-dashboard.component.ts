@@ -13,24 +13,26 @@ export class CustomerDashboardComponent implements OnInit {
   public availableCoupons: Coupon[] = [];
   public purchasedCoupons: Coupon[] = [];
 
-  public showingOne: boolean = false;
-  public usertype: string;
-  public currentCouponFilterType: string;
-
-  public coupSections: ListElement[] = [...lists.customerDashCouponSections];
+  // load table sections from utils/lists
+  public coupSections: ListElement[] = lists.customerDashCouponSections;
 
   constructor(private dataStore: DataStoreService) {}
 
   ngOnInit() {
+    //load purchased coupons from data store and set to local variable
     this.dataStore.purchasedCoupons.subscribe(
       pCoups => (this.purchasedCoupons = pCoups)
     );
+    // load available coupons from data store and set to local variable
     this.dataStore.availableCoupons.subscribe(
       avCoups => (this.availableCoupons = avCoups)
     );
+
+    // calls method that gets coupons from db and sets them in the data store
     this.dataStore.setCustomerCoupons();
   }
 
+  // method to open modal and set data in data store
   openOne(event, itemType) {
     this.dataStore[itemType].next(event);
     this.ngOnInit();

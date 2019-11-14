@@ -12,6 +12,7 @@ import {
   selector: "app-messages",
   templateUrl: "./messages.component.html",
   styleUrls: ["./messages.component.scss"],
+  // these animations animate component when the component when it instantiated and when it is destroyed
   animations: [
     trigger("divState", [
       state(
@@ -43,15 +44,15 @@ import {
 })
 export class MessagesComponent implements OnInit {
   public message: string;
-  public state: string = "start";
   constructor(private messageService: MessageService) {}
 
   ngOnInit() {
+    // load message from message service then after 3.5 seconds reset message to null
     this.messageService.message.subscribe(message => {
       this.message = message;
       setTimeout(() => {
         this.message = null;
-      }, 3000);
+      }, 3500);
     });
   }
 }

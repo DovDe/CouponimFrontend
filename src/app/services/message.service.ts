@@ -5,6 +5,7 @@ import { BehaviorSubject } from "rxjs";
   providedIn: "root"
 })
 export class MessageService {
+  // store message globaly
   public message = new BehaviorSubject<string>(null);
   constructor() {}
 }

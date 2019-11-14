@@ -1,53 +1,50 @@
-<div *ngIf="!isLoading">
-  <div class="custlist">
-    <div class="dash-head">
-      <h2>Customers</h2>
-      <div class="fa-holder" (click)="openAddCustomer()">
-        <span>Add Customer</span><fa name="fas fa-plus-circle fa-lg"></fa>
+<div class="custlist">
+  <div class="dash-head">
+    <h2>Customers</h2>
+    <div class="fa-holder" (click)="openAddCustomer()">
+      <span>Add Customer</span><fa name="fas fa-plus-circle fa-lg"></fa>
+    </div>
+  </div>
+  <div class="cust_headings">
+    <div class="cust_row">
+      <div class="cust_row_data ">
+        <span *ngFor="let item of sections">{{ item.htmlText }}</span>
+        <div class="cust_row_buttons"></div>
       </div>
     </div>
-    <div class="cust_headings">
-      <div class="cust_row">
-        <div class="cust_row_data ">
-          <span *ngFor="let item of sections">{{ item.htmlText }}</span>
-          <div class="cust_row_buttons"></div>
-        </div>
-      </div>
-    </div>
+  </div>
 
-    <div class="cust_info">
-      <div class="cust_row" *ngFor="let cust of customers">
-        <div class="cust_row_data">
-          <span *ngFor="let item of sections"> {{ cust[item.dbName] }}</span>
-          <div class="cust_row_buttons">
-            <input
-              type="button"
-              value="view"
-              name="viewType"
-              (click)="clickedRowButton(cust, $event)"
-            />
-            <input
-              type="button"
-              value="edit"
-              name="viewType"
-              (click)="clickedRowButton(cust, $event)"
-            />
-            <input
-              type="button"
-              value="delete"
-              name="viewType"
-              (click)="onDelete(cust)"
-            />
-          </div>
+  <div class="cust_info">
+    <div class="cust_row" *ngFor="let cust of customers">
+      <div class="cust_row_data">
+        <span *ngFor="let item of sections"> {{ cust[item.dbName] }}</span>
+        <div class="cust_row_buttons">
+          <input
+            type="button"
+            value="view"
+            name="viewType"
+            (click)="clickedRowButton(cust, $event)"
+          />
+          <input
+            type="button"
+            value="edit"
+            name="viewType"
+            (click)="clickedRowButton(cust, $event)"
+          />
+          <input
+            type="button"
+            value="delete"
+            name="viewType"
+            (click)="onDelete(cust)"
+          />
         </div>
       </div>
     </div>
   </div>
-  <app-modal
-    *ngIf="viewOne"
-    [viewType]="viewType"
-    parentType="customer"
-    (close)="onClose()"
-  ></app-modal>
 </div>
-<div *ngIf="isLoading">Loading ***</div>
+<app-modal
+  *ngIf="viewOne"
+  [viewType]="viewType"
+  parentType="customer"
+  (close)="onClose()"
+></app-modal>

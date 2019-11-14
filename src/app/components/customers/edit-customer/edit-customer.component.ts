@@ -56,33 +56,39 @@ export class EditCustomerComponent implements OnInit {
   }
 
   updateCustomer() {
+    // variable to check validity of confirmed password
     let confirmPassword = this.updateCustomerForm.controls.confirmPassword
       .invalid;
+
+    // check if form is valid regardless of cofiremed password
     if (this.updateCustomerForm.invalid && !confirmPassword) {
       this.messageService.message.next(
-        "Sorry: this form is invalid please check the form and submit it again"
+        "This form is invalid please and resubmit"
       );
       return;
     }
+    // set values from form
     this.setFormValuesForDb();
 
-    if (confirmPassword) {
+    // call method to update customer in db
+    if (confirmPassword)
       this.update(
-        `${this.customer.firstName} was update with no change to password`
+        `${this.customer.firstName} was updated with no change to password`
       );
-    } else {
-      this.update(`${this.customer.firstName} was updated`);
-    }
+    else this.update(`${this.customer.firstName} was updated`);
   }
 
+  // method to check form validity in html
   isValid(i) {
     let val = this.updateCustomerForm.get(`${this.sections[i].dbName}`);
     return val.touched && val.invalid;
   }
+  // method to get form section in html
   getSection(i) {
     return this.updateCustomerForm.get(`${this.sections[i].dbName}`);
   }
 
+  // set values from form
   setFormValuesForDb() {
     this.sections.forEach(section => {
       if (this.customer.hasOwnProperty(section.dbName)) {
@@ -92,6 +98,8 @@ export class EditCustomerComponent implements OnInit {
       }
     });
   }
+
+  // update customer in db
   update(updateMessage: string) {
     this.genService.updateItem(this.customer, "customer").subscribe(
       () => {

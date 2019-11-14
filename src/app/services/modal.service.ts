@@ -15,6 +15,7 @@ import { UserinfoCustomerComponent } from "../components/userinfo-customer/useri
   providedIn: "root"
 })
 export class ModalService {
+  // this is a map containing all the possible components that the modal can load
   compMap = {
     viewcoupon: ViewCouponComponent,
     addcoupon: AddCouponComponent,
@@ -30,6 +31,7 @@ export class ModalService {
   };
   constructor() {}
 
+  // get a component based on the map
   getComp(parentType, viewType) {
     return this.compMap[`${viewType}${parentType}`];
   }

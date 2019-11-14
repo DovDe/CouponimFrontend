@@ -22,9 +22,11 @@ import { ListElement } from "src/models/listElement";
 })
 export class EditCompanyComponent implements OnInit {
   public company: Company;
+  // load form sections from utils/lists
   public sections: ListElement[] = lists.editCompanySections;
   public updateCompanyForm: FormGroup;
 
+  //method to close modal emitted to companies component
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
@@ -35,10 +37,13 @@ export class EditCompanyComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    //load company from db and store in local variable
     this.dataStore.company.subscribe(
       company => (this.company = company),
-      err => console.log(err)
+      err => this.messageService.message.next(err)
     );
+
+    // setup form with validation
     this.updateCompanyForm = new FormGroup(
       {
         email: new FormControl(this.company.email, [
@@ -51,38 +56,55 @@ export class EditCompanyComponent implements OnInit {
         ]),
         confirmPassword: new FormControl(null, [Validators.required])
       },
+      // valdition to confirm password loaded from utils/formValidators
       MustMatch("password", "confirmPassword").bind(this)
     );
   }
 
   updateCompany() {
-    if (this.updateCompanyForm.invalid) {
-      if (this.updateCompanyForm.controls.confirmPassword.invalid) {
-        this.messageService.message.next("confirmed password invalid");
-      } else {
-        this.messageService.message.next("form is invalid");
-      }
-      this.close.emit();
-      // this.router.navigate;
-    } else {
-      this.company.email = this.updateCompanyForm.get("email").value;
-      this.company.password = this.updateCompanyForm.get("password").value;
+    // variable checking if password was comfirmed
+    let confirmPassword: boolean = this.updateCompanyForm.controls
+      .confirmPassword.invalid;
 
-      this.genService.updateItem(this.company, "company").subscribe(
-        () => {
-          this.close.emit();
-          this.router.navigate(["/home"]);
-        },
-        err => this.messageService.message.next(err)
+    // check if form is invalid not because of the confirmed password
+    if (
+      this.updateCompanyForm.invalid &&
+      !confirmPassword &&
+      this.updateCompanyForm.touched
+    ) {
+      this.messageService.message.next(
+        "This form is invalid please check and resubmit"
       );
+      return;
     }
+    // set new compant values
+    this.company.email = this.updateCompanyForm.get("email").value;
+    this.company.password = this.updateCompanyForm.get("password").value;
+    // if password is not confirmed update only email else update all company
+    if (confirmPassword)
+      this.update(`${this.company.name} was update with no change to password`);
+    else this.update(`${this.company.name} was updated`);
   }
 
+  // method to get validity of form in html
   isValid(i) {
     let val = this.updateCompanyForm.get(`${this.sections[i].dbName}`);
     return val.touched && val.invalid;
   }
+  // method to get form section in html
   getSection(i) {
     return this.updateCompanyForm.get(`${this.sections[i].dbName}`);
+  }
+
+  // update company
+  update(updateMessage: string) {
+    this.genService.updateItem(this.company, "company").subscribe(
+      () => {
+        this.messageService.message.next(updateMessage);
+        this.close.emit();
+        this.router.navigate([`/home`]);
+      },
+      err => this.messageService.message.next(err)
+    );
   }
 }

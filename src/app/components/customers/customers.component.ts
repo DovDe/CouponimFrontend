@@ -2,7 +2,6 @@ import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { Customer } from "src/models/customer";
 import { ListElement } from "src/models/listElement";
 import { GeneralService } from "src/app/services/general.service";
-import { Router } from "@angular/router";
 import { DataStoreService } from "src/app/services/data-store.service";
 import lists from "../../../utils/lists";
 import { MessageService } from "src/app/services/message.service";
@@ -15,8 +14,10 @@ import { MessageService } from "src/app/services/message.service";
 export class CustomersComponent implements OnInit {
   public customers: Customer[];
 
+  // load customer table columns from utils/lists
   public sections: ListElement[] = lists.adminDashCustomerSections;
-  public isLoading: boolean = false;
+
+  // public isLoading: boolean = false;
   @Output() openOne = new EventEmitter<Customer>();
 
   public viewType: string;
@@ -24,47 +25,52 @@ export class CustomersComponent implements OnInit {
 
   constructor(
     private genService: GeneralService,
-    private router: Router,
     private dataStore: DataStoreService,
     private messageService: MessageService
   ) {}
 
   ngOnInit() {
-    this.getCustomers();
+    //load customers from dataStore and set to local variable
+    this.dataStore.customers.subscribe(
+      customers => (this.customers = customers)
+    );
   }
 
+  // method to open modal and set the customer
   clickedRowButton(cust: Customer, event) {
     this.openOne.emit(cust);
     this.viewType = event.target.value;
     this.viewOne = true;
   }
 
+  // method called to close modal
   onClose() {
-    this.getCustomers();
     this.viewType = null;
     this.viewOne = false;
   }
+
+  // method to open the form to add a customer
   openAddCustomer() {
     this.viewType = "add";
     this.viewOne = true;
   }
-  getCustomers() {
-    this.isLoading = true;
-    this.dataStore.customers.subscribe(customers => {
-      this.customers = customers;
-      this.isLoading = false;
-    });
-  }
 
+  // delete a customer
   onDelete(customer: Customer) {
+    // set name for user notifiation
     let name = customer.firstName;
+    // delete from db
     this.genService.deleteItem(customer, "customer").subscribe(
       () => {
+        // set new array to customers without the delete customer
         let customers = this.customers.filter(cust => {
           return cust != customer;
         });
+        // notfiy user that deletion was successful
         this.messageService.message.next(`${name} was deleted`);
+        // update customers in datastore
         this.dataStore.customers.next(customers);
+        // close modal
         this.onClose();
       },
       err => this.messageService.message.next(err)

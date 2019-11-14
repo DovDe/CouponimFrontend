@@ -11,6 +11,8 @@ export class ErrorComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {}
 
+  // this component is not currently in use
+
   ngOnInit() {
     // this.errorMessage = this.route.snapshot.data["message"];
     this.route.data.subscribe((data: Data) => {

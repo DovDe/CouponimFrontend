@@ -12,6 +12,7 @@ import { MessageService } from "src/app/services/message.service";
 export class ViewCustomerComponent implements OnInit {
   public customer: Customer;
 
+  // load customer table columns from utils/lists
   public sections: ListElement[] = lists.adminDashCustomerSections;
 
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
@@ -22,6 +23,7 @@ export class ViewCustomerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // load customer from dataStore and set to local variable
     this.dataStore.customer.subscribe(
       customer => (this.customer = customer),
       err => this.messageService.message.next(err)

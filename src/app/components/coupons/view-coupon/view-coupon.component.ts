@@ -15,10 +15,13 @@ import { MessageService } from "src/app/services/message.service";
 })
 export class ViewCouponComponent implements OnInit {
   public coupon: Coupon;
-  public rightSection: ListElement[] = lists.couponsViewRightSection;
   public usertype: string;
+  public purchased: boolean;
 
-  @Input() public purchased: boolean;
+  // load section from utils/lists
+  public rightSection: ListElement[] = lists.couponsViewRightSection;
+  // emit close modal method to parent component
+  @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
     private genService: GeneralService,
@@ -27,23 +30,30 @@ export class ViewCouponComponent implements OnInit {
     private messageService: MessageService,
     private dataStore: DataStoreService
   ) {}
-  @Output() close: EventEmitter<void> = new EventEmitter<void>();
-  @Output() reload = new EventEmitter<Coupon>();
 
   ngOnInit() {
+    // load coupon from data store and set to local variable
     this.dataStore.coupon.subscribe(
       coupon => (this.coupon = coupon),
       err => this.messageService.message.next(err)
     );
 
+    // load usertype from auth service and set to varaible
+    // need this to add buttons dynamically
     this.authService.activeUser.subscribe(
-      user => (this.usertype = user.usertype),
+      user => {
+        if (!!user) this.usertype = user.usertype;
+      },
       err => this.messageService.message.next(err)
     );
-    this.purchased = this.genService.purchased;
+    // load purchased value from datastore and set to variable
+    // this is to add purchase button dynamically to component
+    this.purchased = this.dataStore.purchased;
   }
 
+  // purchase coupon method
   purchaseCoupon() {
+    // purchase coupon , notify user, close modal and reload coupons
     this.genService.purchaseCoupon(this.coupon).subscribe(
       () => {
         this.messageService.message.next(`${this.coupon.title} purchased`);

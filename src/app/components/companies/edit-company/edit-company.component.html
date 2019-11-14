@@ -18,6 +18,9 @@
         <span *ngIf="getSection(i).errors.email" class="help-text"
           >please enter a valid email</span
         >
+        <span *ngIf="getSection(i).errors.mustMatch" class="help-text"
+          >confirm password must be identical to password</span
+        >
       </div>
     </div>
 

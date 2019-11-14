@@ -4,7 +4,6 @@
   <app-coupons
     title="Available Coupons"
     class="customer-coup"
-    usertype="customer"
     [sections]="coupSections"
     (openOne)="openOne($event, 'coupon')"
   ></app-coupons>
@@ -13,7 +12,6 @@
     <app-coupons
       title="Purchased Coupons"
       class="customer-coup"
-      usertype="customer"
       [sections]="coupSections"
       (openOne)="openOne($event, 'coupon')"
       purchased="true"

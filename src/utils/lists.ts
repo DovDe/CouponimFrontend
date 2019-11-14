@@ -1,5 +1,6 @@
 import { ListElement } from "src/models/listElement";
 
+// map of list elements
 let el = {
   title: new ListElement("title", "Title", "text"),
   category: new ListElement("categoryName", "Category", "select"),
@@ -19,6 +20,7 @@ let el = {
   ),
   image: new ListElement("image", "Image URL", "text")
 };
+// map of lists
 export default {
   customerDashCouponSections: [
     el.title,

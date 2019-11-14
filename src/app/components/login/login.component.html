@@ -1,20 +1,11 @@
 <div class="login">
-  <!-- <div class="message">
-    <h2 *ngIf="error">{{ error }}</h2>
-  </div> -->
-
   <h1>Couponim login</h1>
 
   <div class="spinner" *ngIf="isLoading">
     <app-loading-spinner></app-loading-spinner>
   </div>
 
-  <form
-    class="form"
-    #authForm="ngForm"
-    (ngSubmit)="login(authForm)"
-    *ngIf="!isLoading"
-  >
+  <form class="form" #authForm="ngForm" (ngSubmit)="login(authForm)">
     <div class="radio">
       <div class="radio_group" *ngFor="let type of usertypes">
         <input

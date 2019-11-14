@@ -7,7 +7,6 @@ import {
   ViewChild,
   ComponentFactoryResolver,
   OnDestroy,
-  AfterViewInit,
   HostListener
 } from "@angular/core";
 import { PlaceholderDirective } from "src/app/directives/placeholder.directive";
@@ -17,13 +16,17 @@ import { ModalService } from "src/app/services/modal.service";
   templateUrl: "./modal.component.html",
   styleUrls: ["./modal.component.scss"]
 })
-export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
-  public header: string;
+export class ModalComponent implements OnInit, OnDestroy {
   @Input() parentType: string;
   @Input() viewType: String;
   @Output() close = new EventEmitter<void>();
 
+  // ASCI code for escape
   private ESC: number = 27;
+
+  // get access to directive that stores placeholder and the placeholder in the DOM
+  // viewChild takes a selector or a type here we are adding the Placeholder directive
+  // and name it viewHost
   @ViewChild(PlaceholderDirective, { static: true })
   viewHost: PlaceholderDirective;
 
@@ -32,6 +35,7 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
     private modalService: ModalService
   ) {}
 
+  // listen to keyboard if the key type is esc close the modal
   @HostListener("window:keyup", ["$event"])
   keyEvent(event: KeyboardEvent) {
     if (event.keyCode === this.ESC) {
@@ -40,10 +44,9 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.header = this.viewType + this.parentType;
+    // load child component
     this.loadComponent();
   }
-  ngAfterViewInit() {}
 
   ngOnDestroy() {
     this.viewHost.viewContainerRef.clear();
@@ -54,18 +57,27 @@ export class ModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   loadComponent() {
-    // service to fetch correct component
+    // go to modal service and return a component based on the parent and view type
     const cmpFromService = this.modalService.getComp(
       this.parentType,
       this.viewType
     );
-    // setup component factory
+
+    // setup component factory  so that angular can setup the componant
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(
       cmpFromService
     );
 
+    // get access to the template and the view container ref using the ViewChild
+    // the ViewContainerReference that enables interaction with the place stored by the
+    // directive in the DOM
     const componentRef = this.viewHost.viewContainerRef;
+
+    // clear all previouse components loaded into this place in the DOM
     componentRef.clear();
+
+    // use the create component method supplied by the ViewContainerRef and pass
+    // it the component factory to load the component into the placeholder directive
     componentRef.createComponent(componentFactory);
   }
 }

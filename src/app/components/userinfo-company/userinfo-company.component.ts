@@ -17,12 +17,13 @@ export class UserinfoCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.dataStore.userInfo.subscribe(user => {
-      if (user != null) this.company = user;
-      else {
-        this.genService.getUserInfo().subscribe(userInfo => {
-          this.company = userInfo;
-        });
-      }
+      // check if user exists in datastore and set if exists
+      if (!!user) this.company = user;
+      //  if not load user info from data store and set local variable
+      else
+        this.genService
+          .getUserInfo()
+          .subscribe(userInfo => (this.company = userInfo));
     });
   }
 }
