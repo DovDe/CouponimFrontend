@@ -96,11 +96,10 @@ export class LoginService {
     // rxJS interval runs once a minute
     return interval(1000 * 60).subscribe(() => {
       // if token expiration is less than current time user is logged out
-      if (
-        JSON.parse(sessionStorage.getItem("user")).tokenExpiration < Date.now()
-      ) {
-        this.logout("token timed out -- please login to continue use of app");
-      }
+      let message = "token timed out -- please login to continue use of app";
+      let user = sessionStorage.getItem("user");
+      if (!!user) this.logout(message);
+      if (JSON.parse(user).tokenExpiration < Date.now()) this.logout(message);
     });
   }
 
